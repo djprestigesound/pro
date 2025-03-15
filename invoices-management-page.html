@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DJ Prestige Sound - Gestion des Factures</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="assets/css/admin-style.css">
+</head>
+<body>
+    <!-- Sidebar (identique sur toutes les pages) -->
+    <div class="sidebar" id="sidebar">
+        <!-- Contenu du sidebar comme dans les autres pages -->
+        <div class="sidebar-header">
+            <div class="d-flex align-items-center">
+                <div class="music-waves">
+                    <div class="music-wave"></div>
+                    <div class="music-wave"></div>
+                    <div class="music-wave"></div>
+                    <div class="music-wave"></div>
+                </div>
+                <span class="logo-text">DJ Prestige Sound</span>
+            </div>
+            <button class="toggle-btn" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="admin-dashboard.php" class="menu-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Tableau de bord</span>
+            </a>
+            
+            <div class="menu-category">Gestion des demandes</div>
+            
+            <a href="admin-service-requests.php" class="menu-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Demandes de service</span>
+            </a>
+            
+            <a href="admin-events.php" class="menu-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Événements</span>
+            </a>
+            
+            <div class="menu-category">Catalogue</div>
+            
+            <a href="admin-music-library.php" class="menu-item">
+                <i class="fas fa-music"></i>
+                <span>Bibliothèque musicale</span>
+            </a>
+            
+            <a href="admin-equipment.php" class="menu-item">
+                <i class="fas fa-sliders-h"></i>
+                <span>Équipement</span>
+            </a>
+            
+            <a href="admin-inventory.php" class="menu-item">
+                <i class="fas fa-boxes"></i>
+                <span>Inventaire</span>
+            </a>
+            
+            <div class="menu-category">Équipe</div>
+            
+            <a href="admin-staff.php" class="menu-item">
+                <i class="fas fa-id-card"></i>
+                <span>Personnel</span>
+            </a>
+            
+            <a href="admin-scheduling.php" class="menu-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Planification</span>
+            </a>
+            
+            <div class="menu-category">Commercial</div>
+            
+            <a href="admin-invoices.php" class="menu-item active">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span>Facturation</span>
+            </a>
+            
+            <a href="admin-marketing.php" class="menu-item">
+                <i class="fas fa-bullhorn"></i>
+                <span>Marketing</span>
+            </a>
+            
+            <a href="admin-venues.php" class="menu-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Lieux & Partenaires</span>
+            </a>
+            
+            <div class="menu-category">Utilisateurs</div>
+            
+            <a href="admin-users.php" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>Clients</span>
+            </a>
+            
+            <a href="admin-providers.php" class="menu-item">
+                <i class="fas fa-user-tie"></i>
+                <span>Prestataires</span>
+            </a>
+            
+            <a href="admin-reviews.php" class="menu-item">
+                <i class="fas fa-star"></i>
+                <span>Avis clients</span>
+            </a>
+            
+            <div class="menu-category">Système</div>
+            
+            <a href="admin-settings.php" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span>Paramètres</span>
+            </a>
+            
+            <a href="admin-logs.php" class="menu-item">
+                <i class="fas fa-history"></i>
+                <span>Logs</span>
+            </a>
+            
+            <a href="admin-analytics.php" class="menu-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>Analytiques</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <img src="https://via.placeholder.com/40x40" alt="Admin Avatar">
+                </div>
+                <div class="user-details">
+                    <p class="user-name">Admin</p>
+                    <p class="user-role">Administrateur</p>
+                </div>
+                <a href="logout.php" class="logout-btn" title="Déconnexion">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="mobile-toggle d-md-none" id="mobileToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        
+        <div class="top-bar">
+            <h1 class="page-title">Gestion des Factures</h1>
+            <div class="d-flex align-items-center">
+                <div class="notification-icon me-3">
+                    <i class="fas fa-bell fa-lg"></i>
+                    <span class="notification-badge">5</span>
+                </div>
+                
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="quickActions" data-bs-toggle="dropdown" aria-expanded="false">
+                        Actions rapides
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="quickActions">
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createInvoiceModal"><i class="fas fa-plus-circle me-2"></i> Nouvelle facture</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createQuoteModal"><i class="fas fa-file-invoice me-2"></i> Nouveau devis</a></li>
+                        <li><a class="dropdown-item" href="#" id="exportInvoices"><i class="fas fa-file-export me-2"></i> Exporter données</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="emailReminders"><i class="fas fa-envelope me-2"></i> Rappels de paiement</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vue par onglets -->
+        <ul class="nav nav-tabs mb-4" id="invoicesTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="invoices-tab" data-bs-toggle="tab" data-bs-target="#invoices" type="button" role="tab" aria-controls="invoices" aria-selected="true">Factures</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="quotes-tab" data-bs-toggle="tab" data-bs-target="#quotes" type="button" role="tab" aria-controls="quotes" aria-selected="false">Devis</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments" type="button" role="tab" aria-controls="payments" aria-selected="false">Paiements</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="expenses-tab" data-bs-toggle="tab" data-bs-target="#expenses" type="button" role="tab" aria-controls="expenses" aria-selected="false">Dépenses</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="reports-tab" data-bs-toggle="tab" data-bs-target="#reports" type="button" role="tab" aria-controls="reports" aria-selected="false">Rapports</button>
+            </li>
+        </ul>
+        
+        <!-- Contenu des onglets -->
+        <div class="tab-content">
+            <!-- Onglet Factures -->
+            <div class="tab-pane fade show active" id="invoices" role="tabpanel" aria-labelledby="invoices-tab">
+                <!-- Filtres -->
+                <div class="dashboard-section mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="invoiceStatusFilter" class="form-label">Statut</label>
+                            <select class="form-select" id="invoiceStatusFilter">
+                                <option value="">Tous les statuts</option>
+                                <option value="paid">Payée</option>
+                                <option value="pending">En attente</option>
+                                <option value="overdue">En retard</option>
+                                <option value="cancelled">Annulée</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="clientFilter" class="form-label">Client</label>
+                            <select class="form-select" id="clientFilter">
+                                <option value="">Tous les clients</option>
+                                <option value="1">Nicolas Bernard</option>
+                                <option value="2">Jenny & Samir</option>
+                                <option value="3">Alicia Hody</option>
+                                <option value="4">Cloé Mathys</option>
+                                <option value="5">Christelle De Mol</option>
+                                <option value="7">Entreprise XYZ</option>
+                                <option value="8">École Saint-Louis</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="dateRangeFilter" class="form-label">Date d'émission</label>
+                            <select class="form-select" id="dateRangeFilter">
+                                <option value="">Toutes les périodes</option>
+                                <option value="this_month">Ce mois-ci</option>
+                                <option value="last_month">Mois dernier</option>
+                                <option value="this_quarter">Ce trimestre</option>
+                                <option value="last_quarter">Trimestre dernier</option>
+                                <option value="this_year">Cette année</option>
+                                <option value="custom">Période personnalisée</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="amountFilter" class="form-label">Montant</label>
+                            <select class="form-select" id="amountFilter">
+                                <option value="">Tous les montants</option>
+                                <option value="0_500">0 - 500€</option>
+                                <option value="500_1000">500 - 1000€</option>
+                                <option value="1000_2000">1000 - 2000€</option>
+                                <option value="2000_plus">2000€ et plus</option>
+                            </select>
+                        </div>
+                        <div class="col-12 d-flex">
+                            <button class="btn btn-primary me-2" id="applyInvoicesFilters"><i class="fas fa-filter me-2"></i>Appliquer les filtres</button>
+                            <button class="btn btn-outline-secondary" id="resetInvoicesFilters"><i class="fas fa-undo me-2"></i>Réinitialiser</button>
+                            
+                            <div class="ms-auto">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="searchInvoices" placeholder="Rechercher...">
+                                    <button class="btn btn-outline-primary" type="button" id="searchInvoicesButton">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats rapides -->
+                <div class="row mb-4">
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon primary">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Total factures</p>
+                                <h2 class="card-value">63</h2>
+                                <p class="card-info">+8 ce mois-ci</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Factures payées</p>
+                                <h2 class="card-value">48</h2>
+                                <p class="card-info">76% du total</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon warning">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">En attente</p>
+                                <h2 class="card-value">12</h2>
+                                <p class="card-info">Montant: 15,450€</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="dashboard-card">
+                            <div class="card-icon danger">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">En retard</p>
+                                <h2 class="card-value">3</h2>
+                                <p class="card-info">Montant: 3,850€</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Liste des factures -->
+                <div class="dashboard-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="section-title mb-0">Liste des factures</h2>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createInvoiceModal">
+                            <i class="fas fa-plus-circle me-2"></i>Créer une facture
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table align-middle" id="invoicesTable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="selectAllInvoices">
+                                        </div>
+                                    </th>
+                                    <th>N° Facture</th>
+                                    <th>Client</th>
+                                    <th>Événement</th>
+                                    <th>Date d'émission</th>
+                                    <th>Date d'échéance</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="1">
+                                        </div>
+                                    </td>
+                                    <td>F-2025-038</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Audrey et Simon</p>
+                                                <small>marchal_audrey@outlook.fr</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Mariage 12/04/2025</td>
+                                    <td>10/03/2025</td>
+                                    <td>10/04/2025</td>
+                                    <td>1,250.00 €</td>
+                                    <td><span class="badge bg-success">Payée</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Envoyer par email</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="2">
+                                        </div>
+                                    </td>
+                                    <td>F-2025-037</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">École Saint-Louis</p>
+                                                <small>direction@saintlouis.be</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Fancy-fair 10/05/2025</td>
+                                    <td>09/03/2025</td>
+                                    <td>09/04/2025</td>
+                                    <td>850.00 €</td>
+                                    <td><span class="badge bg-warning text-dark">En attente</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Envoyer par email</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle me-2"></i>Marquer comme payée</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="3">
+                                        </div>
+                                    </td>
+                                    <td>F-2025-036</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Didier De Maeseneer</p>
+                                                <small>didier.demaeseneer@gmail.com</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Mariage 05/07/2025</td>
+                                    <td>08/03/2025</td>
+                                    <td>08/04/2025</td>
+                                    <td>1,450.00 €</td>
+                                    <td><span class="badge bg-warning text-dark">En attente</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Envoyer par email</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle me-2"></i>Marquer comme payée</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="4">
+                                        </div>
+                                    </td>
+                                    <td>F-2025-035</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Cloé Mathys</p>
+                                                <small>cloemathys.01@gmail.com</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Mariage 11/07/2025</td>
+                                    <td>05/03/2025</td>
+                                    <td>05/04/2025</td>
+                                    <td>1,750.00 €</td>
+                                    <td><span class="badge bg-success">Payée</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Envoyer par email</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="5">
+                                        </div>
+                                    </td>
+                                    <td>F-2025-034</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Entreprise XYZ</p>
+                                                <small>contact@xyz.be</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Soirée Corporate 25/03/2025</td>
+                                    <td>02/03/2025</td>
+                                    <td>02/04/2025</td>
+                                    <td>1,950.00 €</td>
+                                    <td><span class="badge bg-success">Payée</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Envoyer par email</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="6">
+                                        </div>
+                                    </td>
+                                    <td>F-2025-033</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Nicolas Bernard</p>
+                                                <small>nicolet_bernard@inovex.be</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Mariage 29/11/2025</td>
+                                    <td>28/02/2025</td>
+                                    <td>28/03/2025</td>
+                                    <td>1,650.00 €</td>
+                                    <td><span class="badge bg-danger">En retard</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Envoyer par email</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-paper-plane me-2"></i>Envoyer rappel</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle me-2"></i>Marquer comme payée</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="7">
+                                        </div>
+                                    </td>
+                                    <td>F-2025-032</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Alicia Hody</p>
+                                                <small>alicia.hody@gmail.com</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Mariage 21/06/2025</td>
+                                    <td>25/02/2025</td>
+                                    <td>25/03/2025</td>
+                                    <td>1,380.00 €</td>
+                                    <td><span class="badge bg-danger">En retard</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Envoyer par email</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-paper-plane me-2"></i>Envoyer rappel</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle me-2"></i>Marquer comme payée</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="8">
+                                        </div>
+                                    </td>
+                                    <td>F-2025-031</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Jenny & Samir</p>
+                                                <small>jelnikoff@gmail.com</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Mariage 26/07/2025</td>
+                                    <td>20/02/2025</td>
+                                    <td>20/03/2025</td>
+                                    <td>1,520.00 €</td>
+                                    <td><span class="badge bg-danger">En retard</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Envoyer par email</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-paper-plane me-2"></i>Envoyer rappel</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle me-2"></i>Marquer comme payée</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <div class="text-muted">Affichage de 1 à 8 sur 63 factures</div>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li class="page-item disabled"><a class="page-link" href="#"><i class="fas fa-angle-double-left"></i></a></li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                <li class="page-item"><a class="page-link" href="#"><i class="fas fa-angle-double-right"></i></a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                
+                <!-- Actions de masse -->
+                <div class="dashboard-section mt-4">
+                    <h2 class="section-title">Actions de masse</h2>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary w-100" id="bulkSendInvoices">
+                                <i class="fas fa-envelope me-2"></i>Envoyer par email
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-primary w-100" id="bulkDownloadInvoices">
+                                <i class="fas fa-download me-2"></i>Télécharger en PDF
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-success w-100" id="bulkMarkAsPaid">
+                                <i class="fas fa-check-circle me-2"></i>Marquer comme payées
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-outline-danger w-100" id="bulkDeleteInvoices">
+                                <i class="fas fa-trash me-2"></i>Supprimer sélection
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Devis -->
+            <div class="tab-pane fade" id="quotes" role="tabpanel" aria-labelledby="quotes-tab">
+                <!-- Filtres de recherche de devis -->
+                <div class="dashboard-section mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="quoteStatusFilter" class="form-label">Statut</label>
+                            <select class="form-select" id="quoteStatusFilter">
+                                <option value="">Tous les statuts</option>
+                                <option value="sent">Envoyé</option>
+                                <option value="viewed">Consulté</option>
+                                <option value="accepted">Accepté</option>
+                                <option value="rejected">Refusé</option>
+                                <option value="expired">Expiré</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="quoteClientFilter" class="form-label">Client</label>
+                            <select class="form-select" id="quoteClientFilter">
+                                <option value="">Tous les clients</option>
+                                <!-- Options similaires à celles du filtre de factures -->
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="quoteDateRangeFilter" class="form-label">Date d'émission</label>
+                            <select class="form-select" id="quoteDateRangeFilter">
+                                <option value="">Toutes les périodes</option>
+                                <option value="this_month">Ce mois-ci</option>
+                                <option value="last_month">Mois dernier</option>
+                                <option value="this_quarter">Ce trimestre</option>
+                                <option value="last_quarter">Trimestre dernier</option>
+                                <option value="this_year">Cette année</option>
+                                <option value="custom">Période personnalisée</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="quoteAmountFilter" class="form-label">Montant</label>
+                            <select class="form-select" id="quoteAmountFilter">
+                                <option value="">Tous les montants</option>
+                                <option value="0_500">0 - 500€</option>
+                                <option value="500_1000">500 - 1000€</option>
+                                <option value="1000_2000">1000 - 2000€</option>
+                                <option value="2000_plus">2000€ et plus</option>
+                            </select>
+                        </div>
+                        <div class="col-12 d-flex">
+                            <button class="btn btn-primary me-2" id="applyQuotesFilters"><i class="fas fa-filter me-2"></i>Appliquer les filtres</button>
+                            <button class="btn btn-outline-secondary" id="resetQuotesFilters"><i class="fas fa-undo me-2"></i>Réinitialiser</button>
+                            
+                            <div class="ms-auto">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="searchQuotes" placeholder="Rechercher...">
+                                    <button class="btn btn-outline-primary" type="button" id="searchQuotesButton">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats des devis -->
+                <div class="row mb-4">
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon primary">
+                                <i class="fas fa-file-invoice"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Total devis</p>
+                                <h2 class="card-value">45</h2>
+                                <p class="card-info">+12 ce mois-ci</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon success">
+                                <i class="fas fa-thumbs-up"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Devis acceptés</p>
+                                <h2 class="card-value">28</h2>
+                                <p class="card-info">Taux de conversion: 62%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon warning">
+                                <i class="fas fa-spinner"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">En attente</p>
+                                <h2 class="card-value">15</h2>
+                                <p class="card-info">Montant: 23,450€</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="dashboard-card">
+                            <div class="card-icon danger">
+                                <i class="fas fa-thumbs-down"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Devis refusés</p>
+                                <h2 class="card-value">2</h2>
+                                <p class="card-info">Taux de refus: 4%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Liste des devis -->
+                <div class="dashboard-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="section-title mb-0">Liste des devis</h2>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createQuoteModal">
+                            <i class="fas fa-plus-circle me-2"></i>Créer un devis
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table align-middle" id="quotesTable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="selectAllQuotes">
+                                        </div>
+                                    </th>
+                                    <th>N° Devis</th>
+                                    <th>Client</th>
+                                    <th>Événement</th>
+                                    <th>Date d'émission</th>
+                                    <th>Date d'expiration</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="1">
+                                        </div>
+                                    </td>
+                                    <td>D-2025-022</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Laura & Thomas</p>
+                                                <small>laura.thomas@gmail.com</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Mariage 14/06/2025</td>
+                                    <td>12/03/2025</td>
+                                    <td>12/04/2025</td>
+                                    <td>1,780.00 €</td>
+                                    <td><span class="badge bg-warning text-dark">En attente</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Envoyer par email</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-file-invoice-dollar me-2"></i>Convertir en facture</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="2">
+                                        </div>
+                                    </td>
+                                    <td>D-2025-021</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">École Notre-Dame</p>
+                                                <small>direction@notredame.be</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Fancy-fair 28/05/2025</td>
+                                    <td>10/03/2025</td>
+                                    <td>10/04/2025</td>
+                                    <td>920.00 €</td>
+                                    <td><span class="badge bg-info">Consulté</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Envoyer par email</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle me-2"></i>Marquer comme accepté</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-file-invoice-dollar me-2"></i>Convertir en facture</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="3">
+                                        </div>
+                                    </td>
+                                    <td>D-2025-020</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Sophie & Vincent</p>
+                                                <small>sophie.vincent@gmail.com</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Mariage 23/08/2025</td>
+                                    <td>08/03/2025</td>
+                                    <td>08/04/2025</td>
+                                    <td>1,850.00 €</td>
+                                    <td><span class="badge bg-warning text-dark">En attente</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Envoyer par email</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle me-2"></i>Marquer comme accepté</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-file-invoice-dollar me-2"></i>Convertir en facture</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="4">
+                                        </div>
+                                    </td>
+                                    <td>D-2025-019</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Christelle De Mol</p>
+                                                <small>christelledemol7@gmail.com</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Mariage 05/09/2026</td>
+                                    <td>05/03/2025</td>
+                                    <td>05/04/2025</td>
+                                    <td>1,750.00 €</td>
+                                    <td><span class="badge bg-success">Accepté</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-file-invoice-dollar me-2"></i>Convertir en facture</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-archive me-2"></i>Archiver</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="5">
+                                        </div>
+                                    </td>
+                                    <td>D-2025-018</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Entreprise ABC</p>
+                                                <small>contact@abc-company.be</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Soirée Corporate 18/04/2025</td>
+                                    <td>02/03/2025</td>
+                                    <td>02/04/2025</td>
+                                    <td>2,450.00 €</td>
+                                    <td><span class="badge bg-info">Consulté</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Envoyer par email</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle me-2"></i>Marquer comme accepté</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-file-invoice-dollar me-2"></i>Convertir en facture</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Modifier</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="6">
+                                        </div>
+                                    </td>
+                                    <td>D-2025-017</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Marc & Elise</p>
+                                                <small>marc.elise@outlook.com</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Mariage 12/07/2025</td>
+                                    <td>28/02/2025</td>
+                                    <td>28/03/2025</td>
+                                    <td>1,680.00 €</td>
+                                    <td><span class="badge bg-success">Accepté</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>Voir</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Télécharger</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-file-invoice-dollar me-2"></i>Convertir en facture</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-copy me-2"></i>Dupliquer</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fas fa-archive me-2"></i>Archiver</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <div class="text-muted">Affichage de 1 à 6 sur 45 devis</div>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li class="page-item disabled"><a class="page-link" href="#"><i class="fas fa-angle-double-left"></i></a></li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                <li class="page-item"><a class="page-link" href="#"><i class="fas fa-angle-double-right"></i></a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                
+                <!-- Taux de conversion par type d'événement -->
+                <div class="row mt-4">
+                    <div class="col-md-6 mb-4">
+                        <div class="dashboard-section h-100">
+                            <h2 class="section-title">Taux de conversion par type d'événement</h2>
+                            <div class="chart-container" id="conversionRateByEventChart"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="dashboard-section h-100">
+                            <h2 class="section-title">Délai moyen d'acceptation</h2>
+                            <div class="chart-container" id="quoteAcceptanceTimeChart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Paiements -->
+            <div class="tab-pane fade" id="payments" role="tabpanel" aria-labelledby="payments-tab">
+                <!-- Filtres des paiements -->
+                <div class="dashboard-section mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="paymentMethodFilter" class="form-label">Méthode de paiement</label>
+                            <select class="form-select" id="paymentMethodFilter">
+                                <option value="">Toutes les méthodes</option>
+                                <option value="bank_transfer">Virement bancaire</option>
+                                <option value="cash">Espèces</option>
+                                <option value="card">Carte bancaire</option>
+                                <option value="check">Chèque</option>
+                                <option value="online">Paiement en ligne</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="paymentStatusFilter" class="form-label">Statut</label>
+                            <select class="form-select" id="paymentStatusFilter">
+                                <option value="">Tous les statuts</option>
+                                <option value="completed">Complété</option>
+                                <option value="pending">En attente</option>
+                                <option value="failed">Échoué</option>
+                                <option value="refunded">Remboursé</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="paymentDateRangeFilter" class="form-label">Date de paiement</label>
+                            <select class="form-select" id="paymentDateRangeFilter">
+                                <option value="">Toutes les périodes</option>
+                                <option value="today">Aujourd'hui</option>
+                                <option value="this_week">Cette semaine</option>
+                                <option value="this_month">Ce mois-ci</option>
+                                <option value="last_month">Mois dernier</option>
+                                <option value="this_quarter">Ce trimestre</option>
+                                <option value="custom">Période personnalisée</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="paymentAmountFilter" class="form-label">Montant</label>
+                            <select class="form-select" id="paymentAmountFilter">
+                                <option value="">Tous les montants</option>
+                                <option value="0_500">0 - 500€</option>
+                                <option value="500_1000">500 - 1000€</option>
+                                <option value="1000_2000">1000 - 2000€</option>
+                                <option value="2000_plus">2000€ et plus</option>
+                            </select>
+                        </div>
+                        <div class="col-12 d-flex">
+                            <button class="btn btn-primary me-2" id="applyPaymentsFilters"><i class="fas fa-filter me-2"></i>Appliquer les filtres</button>
+                            <button class="btn btn-outline-secondary" id="resetPaymentsFilters"><i class="fas fa-undo me-2"></i>Réinitialiser</button>
+                            
+                            <div class="ms-auto">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="searchPayments" placeholder="Rechercher...">
+                                    <button class="btn btn-outline-primary" type="button" id="searchPaymentsButton">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats des paiements -->
+                <div class="row mb-4">
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon success">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Paiements reçus</p>
+                                <h2 class="card-value">92,150€</h2>
+                                <p class="card-info">+15% ce mois-ci</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon primary">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Paiements ce mois</p>
+                                <h2 class="card-value">12,850€</h2>
+                                <p class="card-info">8 transactions</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon warning">
+                                <i class="fas fa-hand-holding-usd"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Paiements à venir</p>
+                                <h2 class="card-value">15,450€</h2>
+                                <p class="card-info">12 en attente</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="dashboard-card">
+                            <div class="card-icon danger">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Paiements en retard</p>
+                                <h2 class="card-value">3,850€</h2>
+                                <p class="card-info">3 factures</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Liste des paiements -->
+                <div class="dashboard-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="section-title mb-0">Historique des paiements</h2>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#recordPaymentModal">
+                            <i class="fas fa-plus-circle me-2"></i>Enregistrer un paiement
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table align-middle" id="paymentsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID Paiement</th>
+                                    <th>Facture</th>
+                                    <th>Client</th>
+                                    <th>Date</th>
+                                    <th>Méthode</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                    <th>Notes</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>PAY-2025-042</td>
+                                    <td>F-2025-038</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <span>Audrey et Simon</span>
+                                        </div>
+                                    </td>
+                                    <td>12/03/2025</td>
+                                    <td>Virement bancaire</td>
+                                    <td>1,250.00 €</td>
+                                    <td><span class="badge bg-success">Complété</span></td>
+                                    <td>Paiement intégral</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-outline-secondary me-1"><i class="fas fa-receipt"></i></button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="fas fa-undo"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PAY-2025-041</td>
+                                    <td>F-2025-035</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <span>Cloé Mathys</span>
+                                        </div>
+                                    </td>
+                                    <td>10/03/2025</td>
+                                    <td>Carte bancaire</td>
+                                    <td>1,750.00 €</td>
+                                    <td><span class="badge bg-success">Complété</span></td>
+                                    <td>Paiement intégral</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-outline-secondary me-1"><i class="fas fa-receipt"></i></button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="fas fa-undo"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PAY-2025-040</td>
+                                    <td>F-2025-034</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <span>Entreprise XYZ</span>
+                                        </div>
+                                    </td>
+                                    <td>09/03/2025</td>
+                                    <td>Virement bancaire</td>
+                                    <td>1,950.00 €</td>
+                                    <td><span class="badge bg-success">Complété</span></td>
+                                    <td>Paiement intégral</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-outline-secondary me-1"><i class="fas fa-receipt"></i></button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="fas fa-undo"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PAY-2025-039</td>
+                                    <td>F-2025-033</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <span>Nicolas Bernard</span>
+                                        </div>
+                                    </td>
+                                    <td>05/03/2025</td>
+                                    <td>Virement bancaire</td>
+                                    <td>500.00 €</td>
+                                    <td><span class="badge bg-warning text-dark">Acompte</span></td>
+                                    <td>Premier acompte (30%)</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-outline-secondary me-1"><i class="fas fa-receipt"></i></button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="fas fa-undo"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PAY-2025-038</td>
+                                    <td>F-2025-030</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <span>Martin & Julie</span>
+                                        </div>
+                                    </td>
+                                    <td>01/03/2025</td>
+                                    <td>Carte bancaire</td>
+                                    <td>1,620.00 €</td>
+                                    <td><span class="badge bg-success">Complété</span></td>
+                                    <td>Paiement intégral</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-outline-secondary me-1"><i class="fas fa-receipt"></i></button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="fas fa-undo"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PAY-2025-037</td>
+                                    <td>F-2025-028</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <span>École Notre-Dame</span>
+                                        </div>
+                                    </td>
+                                    <td>25/02/2025</td>
+                                    <td>Virement bancaire</td>
+                                    <td>980.00 €</td>
+                                    <td><span class="badge bg-success">Complété</span></td>
+                                    <td>Paiement intégral</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1"><i class="fas fa-eye"></i></button>
+                                        <button class="btn btn-sm btn-outline-secondary me-1"><i class="fas fa-receipt"></i></button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="fas fa-undo"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <div class="text-muted">Affichage de 1 à 6 sur 58 paiements</div>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li class="page-item disabled"><a class="page-link" href="#"><i class="fas fa-angle-double-left"></i></a></li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                <li class="page-item"><a class="page-link" href="#"><i class="fas fa-angle-double-right"></i></a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                
+                <!-- Méthodes de paiement -->
+                <div class="row mt-4">
+                    <div class="col-md-6 mb-4">
+                        <div class="dashboard-section h-100">
+                            <h2 class="section-title">Méthodes de paiement utilisées</h2>
+                            <div class="chart-container" id="paymentMethodsChart"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="dashboard-section h-100">
+                            <h2 class="section-title">Analyse des délais de paiement</h2>
+                            <div class="chart-container" id="paymentTimeAnalysisChart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Dépenses -->
+            <div class="tab-pane fade" id="expenses" role="tabpanel" aria-labelledby="expenses-tab">
+                <!-- Filtres des dépenses -->
+                <div class="dashboard-section mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="expenseCategoryFilter" class="form-label">Catégorie</label>
+                            <select class="form-select" id="expenseCategoryFilter">
+                                <option value="">Toutes les catégories</option>
+                                <option value="equipment">Équipement</option>
+                                <option value="maintenance">Maintenance</option>
+                                <option value="rent">Loyer</option>
+                                <option value="utilities">Charges</option>
+                                <option value="transportation">Transport</option>
+                                <option value="insurance">Assurance</option>
+                                <option value="salaries">Salaires</option>
+                                <option value="freelancers">Prestataires</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="software">Logiciels</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="expenseDateRangeFilter" class="form-label">Période</label>
+                            <select class="form-select" id="expenseDateRangeFilter">
+                                <option value="">Toutes les périodes</option>
+                                <option value="this_month">Ce mois-ci</option>
+                                <option value="last_month">Mois dernier</option>
+                                <option value="this_quarter">Ce trimestre</option>
+                                <option value="last_quarter">Trimestre dernier</option>
+                                <option value="this_year">Cette année</option>
+                                <option value="last_year">Année dernière</option>
+                                <option value="custom">Période personnalisée</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="expenseAmountFilter" class="form-label">Montant</label>
+                            <select class="form-select" id="expenseAmountFilter">
+                                <option value="">Tous les montants</option>
+                                <option value="0_100">0 - 100€</option>
+                                <option value="100_500">100 - 500€</option>
+                                <option value="500_1000">500 - 1000€</option>
+                                <option value="1000_plus">1000€ et plus</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="expenseStatusFilter" class="form-label">Statut</label>
+                            <select class="form-select" id="expenseStatusFilter">
+                                <option value="">Tous les statuts</option>
+                                <option value="paid">Payée</option>
+                                <option value="pending">En attente</option>
+                                <option value="recurring">Récurrente</option>
+                            </select>
+                        </div>
+                        <div class="col-12 d-flex">
+                            <button class="btn btn-primary me-2" id="applyExpensesFilters"><i class="fas fa-filter me-2"></i>Appliquer les filtres</button>
+                            <button class="btn btn-outline-secondary" id="resetExpensesFilters"><i class="fas fa-undo me-2"></i>Réinitialiser</button>
+                            
+                            <div class="ms-auto">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="searchExpenses" placeholder="Rechercher...">
+                                    <button class="btn btn-outline-primary" type="button" id="searchExpensesButton">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats des dépenses -->
+                <div class="row mb-4">
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon danger">
+                                <i class="fas fa-money-bill-alt"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Total dépenses 2025</p>
+                                <h2 class="card-value">35,670€</h2>
+                                <p class="card-info">+15% vs 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon warning">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Dépenses ce mois</p>
+                                <h2 class="card-value">4,250€</h2>
+                                <p class="card-info">+8% vs mois dernier</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon info">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Catégorie principale</p>
+                                <h2 class="card-value">Équipement</h2>
+                                <p class="card-info">35% des dépenses</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="dashboard-card">
+                            <div class="card-icon primary">
+                                <i class="fas fa-sync-alt"></i>
+                            </div>
+                            <div class="card-content">

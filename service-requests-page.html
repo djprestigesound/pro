@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DJ Prestige Sound - Gestion des demandes de service</title>
+  <!-- Bootstrap, Font Awesome, Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+  <!-- Feuille de style personnalisée -->
+  <link rel="stylesheet" href="assets/css/admin-style.css">
+  <style>
+    /* Améliorations CSS pour transitions et animations */
+    .sidebar,
+    .main-content {
+      transition: all 0.3s ease;
+    }
+    .sidebar.collapsed {
+      width: 60px;
+    }
+    .sidebar.collapsed .menu-item span {
+      opacity: 0;
+    }
+    .music-waves {
+      display: flex;
+      align-items: flex-end;
+    }
+    .music-wave {
+      width: 3px;
+      height: 20px;
+      background: #3498db;
+      margin: 0 1px;
+      animation: wave 1s infinite;
+    }
+    @keyframes wave {
+      0%, 100% { transform: scaleY(0.5); }
+      50% { transform: scaleY(1); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar" role="navigation" aria-label="Navigation principale">
+    <div class="sidebar-header">
+      <div class="d-flex align-items-center">
+        <div class="music-waves" aria-hidden="true">
+          <div class="music-wave"></div>
+          <div class="music-wave"></div>
+          <div class="music-wave"></div>
+          <div class="music-wave"></div>
+        </div>
+        <span class="logo-text">DJ Prestige Sound</span>
+      </div>
+      <button class="toggle-btn" id="toggleSidebar" aria-label="Basculer la navigation" aria-controls="sidebar" aria-expanded="true">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    <div class="sidebar-menu">
+      <a href="admin-dashboard.php" class="menu-item">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Tableau de bord</span>
+      </a>
+      <div class="menu-category">Gestion des demandes</div>
+      <a href="admin-service-requests.php" class="menu-item active">
+        <i class="fas fa-clipboard-list"></i>
+        <span>Demandes de service</span>
+      </a>
+      <a href="admin-events.php" class="menu-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Événements</span>
+      </a>
+      <div class="menu-category">Catalogue</div>
+      <a href="admin-music-library.php" class="menu-item">
+        <i class="fas fa-music"></i>
+        <span>Bibliothèque musicale</span>
+      </a>
+      <a href="admin-equipment.php" class="menu-item">
+        <i class="fas fa-sliders-h"></i>
+        <span>Équipement</span>
+      </a>
+      <a href="admin-inventory.php" class="menu-item">
+        <i class="fas fa-boxes"></i>
+        <span>Inventaire</span>
+      </a>
+      <div class="menu-category">Équipe</div>
+      <a href="admin-staff.php" class="menu-item">
+        <i class="fas fa-id-card"></i>
+        <span>Personnel</span>
+      </a>
+      <a href="admin-scheduling.php" class="menu-item">
+        <i class="fas fa-calendar-check"></i>
+        <span>Planification</span>
+      </a>
+      <div class="menu-category">Commercial</div>
+      <a href="admin-invoices.php" class="menu-item">
+        <i class="fas fa-file-invoice-dollar"></i>
+        <span>Facturation</span>
+      </a>
+      <a href="admin-marketing.php" class="menu-item">
+        <i class="fas fa-bullhorn"></i>
+        <span>Marketing</span>
+      </a>
+      <a href="admin-venues.php" class="menu-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>Lieux &amp; Partenaires</span>
+      </a>
+      <div class="menu-category">Utilisateurs</div>
+      <a href="admin-users.php" class="menu-item">
+        <i class="fas fa-users"></i>
+        <span>Clients</span>
+      </a>
+      <a href="admin-providers.php" class="menu-item">
+        <i class="fas fa-user-tie"></i>
+        <span>Prestataires</span>
+      </a>
+      <a href="admin-reviews.php" class="menu-item">
+        <i class="fas fa-star"></i>
+        <span>Avis clients</span>
+      </a>
+      <div class="menu-category">Système</div>
+      <a href="admin-settings.php" class="menu-item">
+        <i class="fas fa-cog"></i>
+        <span>Paramètres</span>
+      </a>
+      <a href="admin-logs.php" class="menu-item">
+        <i class="fas fa-history"></i>
+        <span>Logs</span>
+      </a>
+      <a href="admin-analytics.php" class="menu-item">
+        <i class="fas fa-chart-bar"></i>
+        <span>Analytiques</span>
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">
+          <img src="https://via.placeholder.com/40x40" alt="Avatar de l'administrateur">
+        </div>
+        <div class="user-details">
+          <p class="user-name">Admin</p>
+          <p class="user-role">Administrateur</p>
+        </div>
+        <a href="logout.php" class="logout-btn" title="Déconnexion">
+          <i class="fas fa-sign-out-alt"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Contenu principal -->
+  <main class="main-content" id="mainContent" role="main">
+    <div class="mobile-toggle d-md-none" id="mobileToggle" aria-label="Ouvrir le menu de navigation">
+      <i class="fas fa-bars"></i>
+    </div>
+    <div class="top-bar d-flex justify-content-between align-items-center">
+      <h1 class="page-title">Gestion des demandes de service</h1>
+      <div class="d-flex align-items-center">
+        <div class="notification-icon me-3" aria-label="Notifications">
+          <i class="fas fa-bell fa-lg"></i>
+          <span class="notification-badge">5</span>
+        </div>
+        <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" id="quickActions" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+            Actions rapides
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="quickActions">
+            <li>
+              <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#newRequestModal">
+                <i class="fas fa-plus-circle me-2"></i> Nouvelle demande
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" id="exportRequests">
+                <i class="fas fa-file-export me-2"></i> Exporter les demandes
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" id="sendBulkEmail">
+                <i class="fas fa-envelope me-2"></i> Envoyer email groupé
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item" href="admin-events.php">
+                <i class="fas fa-calendar-alt me-2"></i> Voir les événements
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Filtres et recherche -->
+    <section class="dashboard-section mb-4">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label for="statusFilter" class="form-label">Statut</label>
+          <select class="form-select" id="statusFilter">
+            <option value="">Tous les statuts</option>
+            <option value="pending">En attente</option>
+            <option value="contacted">Contacté</option>
+            <option value="meeting_scheduled">Rendez-vous planifié</option>
+            <option value="quote_sent">Devis envoyé</option>
+            <option value="confirmed">Confirmé</option>
+            <option value="rejected">Refusé</option>
+            <option value="cancelled">Annulé</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="serviceFilter" class="form-label">Service</label>
+          <select class="form-select" id="serviceFilter">
+            <option value="">Tous les services</option>
+            <option value="dj">DJ</option>
+            <option value="sound">Sonorisation</option>
+            <option value="lighting">Éclairage</option>
+            <option value="ceremony">Cérémonie</option>
+            <option value="photo">Photographe</option>
+            <option value="saxophone">Saxophoniste</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="dateRangeFilter" class="form-label">Période</label>
+          <select class="form-select" id="dateRangeFilter">
+            <option value="all">Toutes les périodes</option>
+            <option value="next_30">30 prochains jours</option>
+            <option value="next_90">90 prochains jours</option>
+            <option value="next_180">6 prochains mois</option>
+            <option value="next_year">Année prochaine</option>
+            <option value="custom">Période personnalisée</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="sortOrder" class="form-label">Trier par</label>
+          <select class="form-select" id="sortOrder">
+            <option value="date_desc">Date d'événement (récent)</option>
+            <option value="date_asc">Date d'événement (ancien)</option>
+            <option value="request_date_desc">Date de demande (récent)</option>
+            <option value="request_date_asc">Date de demande (ancien)</option>
+            <option value="client_name">Nom du client</option>
+          </select>
+        </div>
+        <div class="col-12 d-flex">
+          <button class="btn btn-primary me-2" id="applyFilters">
+            <i class="fas fa-filter me-2"></i>Appliquer les filtres
+          </button>
+          <button class="btn btn-outline-secondary" id="resetFilters">
+            <i class="fas fa-undo me-2"></i>Réinitialiser
+          </button>
+          <div class="ms-auto">
+            <div class="input-group">
+              <input type="text" class="form-control" id="searchRequests" placeholder="Rechercher...">
+              <button class="btn btn-outline-primary" type="button" id="searchButton">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Statistiques -->
+    <section class="row mb-4">
+      <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+        <div class="dashboard-card">
+          <div class="card-icon primary">
+            <i class="fas fa-clipboard-list"></i>
+          </div>
+          <div class="card-content">
+            <p class="card-title">Total demandes</p>
+            <h2 class="card-value">78</h2>
+            <p class="card-info">+12 ce mois-ci</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+        <div class="dashboard-card">
+          <div class="card-icon warning">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="card-content">
+            <p class="card-title">En attente</p>
+            <h2 class="card-value">14</h2>
+            <p class="card-info">2 nouvelles aujourd'hui</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+        <div class="dashboard-card">
+          <div class="card-icon success">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="card-content">
+            <p class="card-title">Confirmées</p>
+            <h2 class="card-value">45</h2>
+            <p class="card-info">Taux conversion: 68%</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="dashboard-card">
+          <div class="card-icon danger">
+            <i class="fas fa-times-circle"></i>
+          </div>
+          <div class="card-content">
+            <p class="card-title">Refusées/Annulées</p>
+            <h2 class="card-value">19</h2>
+            <p class="card-info">-3 par rapport au mois dernier</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Tableau des demandes -->
+    <section class="dashboard-section">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title mb-0">Liste des demandes de service</h2>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newRequestModal">
+          <i class="fas fa-plus-circle me-2"></i>Nouvelle demande
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table align-middle" id="serviceRequestsTable">
+          <thead>
+            <tr>
+              <th>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="selectAll" aria-label="Sélectionner toutes les demandes">
+                </div>
+              </th>
+              <th>Client</th>
+              <th>Date de demande</th>
+              <th>Date d'événement</th>
+              <th>Type</th>
+              <th>Services</th>
+              <th>Lieu</th>
+              <th>Statut</th>
+              <th>Prochain suivi</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Exemple d'une ligne de tableau -->
+            <tr>
+              <td>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="1" aria-label="Sélectionner cette demande">
+                </div>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar de Nicolas Bernard">
+                  <div>
+                    <p class="mb-0 fw-bold">Nicolas Bernard</p>
+                    <small>nicolet_bernard@inovex.be</small>
+                  </div>
+                </div>
+              </td>
+              <td>12/03/2025</td>
+              <td>29/11/2025</td>
+              <td>Mariage</td>
+              <td>
+                <span class="badge bg-primary">DJ</span>
+                <span class="badge bg-info">Saxophoniste</span>
+              </td>
+              <td>Bronromme</td>
+              <td><span class="badge badge-pending">En attente</span></td>
+              <td>15/03/2025</td>
+              <td>
+                <a href="#" class="action-btn view-request" data-id="1" title="Voir" aria-label="Voir la demande"><i class="fas fa-eye"></i></a>
+                <a href="#" class="action-btn edit-request" data-id="1" title="Modifier" aria-label="Modifier la demande"><i class="fas fa-edit"></i></a>
+                <a href="#" class="action-btn delete-request" data-id="1" title="Supprimer" aria-label="Supprimer la demande"><i class="fas fa-trash"></i></a>
+              </td>
+            </tr>
+            <!-- D'autres lignes de demandes seraient ici -->
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <div class="text-muted">Affichage de 1 à 7 sur 78 demandes</div>
+        <nav aria-label="Navigation des pages">
+          <ul class="pagination">
+            <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"><i class="fas fa-angle-double-left"></i></a></li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">4</a></li>
+            <li class="page-item"><a class="page-link" href="#">5</a></li>
+            <li class="page-item"><a class="page-link" href="#"><i class="fas fa-angle-double-right"></i></a></li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+    
+    <!-- Actions de masse -->
+    <section class="dashboard-section mt-4">
+      <h2 class="section-title">Actions de masse</h2>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <button class="btn btn-outline-primary w-100" id="bulkEmail">
+            <i class="fas fa-envelope me-2"></i>Envoyer email groupé
+          </button>
+        </div>
+        <div class="col-md-4">
+          <button class="btn btn-outline-primary w-100" id="bulkStatus">
+            <i class="fas fa-tag me-2"></i>Changer statut
+          </button>
+        </div>
+        <div class="col-md-4">
+          <button class="btn btn-outline-danger w-100" id="bulkDelete">
+            <i class="fas fa-trash me-2"></i>Supprimer sélection
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Modal : Nouvelle demande -->
+  <div class="modal fade" id="newRequestModal" tabindex="-1" aria-labelledby="newRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newRequestModalLabel">Nouvelle demande de service</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+        </div>
+        <div class="modal-body">
+          <form id="newRequestForm">
+            <!-- Informations client -->
+            <h6 class="form-section-title">Informations client</h6>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="clientType" class="form-label">Type de client</label>
+                <select class="form-select" id="clientType" required>
+                  <option value="">Sélectionner</option>
+                  <option value="existing">Client existant</option>
+                  <option value="new">Nouveau client</option>
+                </select>
+              </div>
+              <div class="col-md-6" id="existingClientContainer">
+                <label for="existingClient" class="form-label">Sélectionner un client</label>
+                <select class="form-select" id="existingClient">
+                  <option value="">Sélectionner un client</option>
+                  <option value="1">Nicolas Bernard</option>
+                  <option value="2">Jenny &amp; Samir</option>
+                  <option value="3">Alicia Hody</option>
+                  <option value="4">Cloé Mathys</option>
+                  <option value="5">Christelle De Mol</option>
+                </select>
+              </div>
+            </div>
+            <div id="newClientContainer" style="display: none;">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="clientName" class="form-label">Nom complet</label>
+                  <input type="text" class="form-control" id="clientName">
+                </div>
+                <div class="col-md-6">
+                  <label for="clientEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="clientEmail">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="clientPhone" class="form-label">Téléphone</label>
+                  <input type="tel" class="form-control" id="clientPhone">
+                </div>
+                <div class="col-md-6">
+                  <label for="clientAddress" class="form-label">Adresse</label>
+                  <input type="text" class="form-control" id="clientAddress">
+                </div>
+              </div>
+            </div>
+            
+            <!-- Informations événement -->
+            <h6 class="form-section-title mt-4">Informations événement</h6>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="eventType" class="form-label">Type d'événement</label>
+                <select class="form-select" id="eventType" required>
+                  <option value="">Sélectionner</option>
+                  <option value="wedding">Mariage</option>
+                  <option value="birthday">Anniversaire</option>
+                  <option value="corporate">Événement d'entreprise</option>
+                  <option value="party">Soirée</option>
+                  <option value="other">Autre</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="eventDate" class="form-label">Date d'événement</label>
+                <input type="date" class="form-control" id="eventDate" required>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <label for="eventLocation" class="form-label">Lieu</label>
+                <input type="text" class="form-control" id="eventLocation" placeholder="Nom et adresse du lieu">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="eventStartTime" class="form-label">Heure de début</label>
+                <input type="time" class="form-control" id="eventStartTime">
+              </div>
+              <div class="col-md-6">
+                <label for="eventEndTime" class="form-label">Heure de fin</label>
+                <input type="time" class="form-control" id="eventEndTime">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <label class="form-label">Services demandés</label>
+                <div class="d-flex flex-wrap gap-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="dj" id="serviceDJ">
+                    <label class="form-check-label" for="serviceDJ">DJ</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="sound" id="serviceSound">
+                    <label class="form-check-label" for="serviceSound">Sonorisation</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="lighting" id="serviceLighting">
+                    <label class="form-check-label" for="serviceLighting">Éclairage</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="ceremony" id="serviceCeremony">
+                    <label class="form-check-label" for="serviceCeremony">Cérémonie Laïque</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="photo" id="servicePhoto">
+                    <label class="form-check-label" for="servicePhoto">Photographe</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="saxophone" id="serviceSaxophone">
+                    <label class="form-check-label" for="serviceSaxophone">Saxophoniste</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <label for="eventNotes" class="form-label">Notes et commentaires</label>
+                <textarea class="form-control" id="eventNotes" rows="3" placeholder="Informations supplémentaires..."></textarea>
+              </div>
+            </div>
+            
+            <!-- Statut de la demande -->
+            <h6 class="form-section-title mt-4">Statut et suivi</h6>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="requestStatus" class="form-label">Statut initial</label>
+                <select class="form-select" id="requestStatus" required>
+                  <option value="pending">En attente</option>
+                  <option value="contacted">Contacté</option>
+                  <option value="meeting_scheduled">Rendez-vous planifié</option>
+                  <option value="quote_sent">Devis envoyé</option>
+                  <option value="confirmed">Confirmé</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="followUpDate" class="form-label">Date de suivi</label>
+                <input type="date" class="form-control" id="followUpDate">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <label for="internalNotes" class="form-label">Notes internes</label>
+                <textarea class="form-control" id="internalNotes" rows="2" placeholder="Notes visibles uniquement par l'administration..."></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-primary" id="saveNewRequest">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal : Vue détaillée -->
+  <div class="modal fade" id="viewRequestModal" tabindex="-1" aria-labelledby="viewRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewRequestModalLabel">Détails de la demande</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <h6 class="text-muted">Informations client</h6>
+              <div class="d-flex align-items-center mb-3">
+                <img src="https://via.placeholder.com/60x60" class="rounded-circle me-3" width="60" height="60" alt="Avatar du client">
+                <div>
+                  <h5 class="mb-0" id="viewClientName">Nicolas Bernard</h5>
+                  <p class="mb-0 text-muted" id="viewClientEmail">nicolet_bernard@inovex.be</p>
+                  <p class="mb-0" id="viewClientPhone">+32 474 123 456</p>
+                </div>
+              </div>
+              <p class="mb-1"><strong>Adresse:</strong> <span id="viewClientAddress">Rue de la Station 15, 4800 Verviers</span></p>
+              <p class="mb-1"><strong>Client depuis:</strong> <span id="viewClientSince">12/03/2025</span></p>
+              <p class="mb-0"><strong>Événements précédents:</strong> <span id="viewClientPreviousEvents">Aucun</span></p>
+            </div>
+            <div class="col-md-6">
+              <h6 class="text-muted">Détails de la demande</h6>
+              <p class="mb-1"><strong>ID de demande:</strong> <span id="viewRequestId">REQ-2025-001</span></p>
+              <p class="mb-1"><strong>Date de demande:</strong> <span id="viewRequestDate">12/03/2025</span></p>
+              <p class="mb-1"><strong>Statut actuel:</strong> <span id="viewRequestStatus" class="badge badge-pending">En attente</span></p>
+              <p class="mb-1"><strong>Prochain suivi:</strong> <span id="viewNextFollowUp">15/03/2025</span></p>
+              <p class="mb-0"><strong>Assigné à:</strong> <span id="viewAssignedTo">Admin</span></p>
+            </div>
+          </div>
+          <hr>
+          <div class="row mb-4">
+            <div class="col-12">
+              <h6 class="text-muted">Événement</h6>
+              <div class="row">
+                <div class="col-md-6">
+                  <p class="mb-1"><strong>Type:</strong> <span id="viewEventType">Mariage</span></p>
+                  <p class="mb-1"><strong>Date:</strong> <span id="viewEventDate">29/11/2025</span></p>
+                  <p class="mb-1"><strong>Horaire:</strong> <span id="viewEventTime">18:00 - 04:00</span></p>
+                </div>
+                <div class="col-md-6">
+                  <p class="mb-1"><strong>Lieu:</strong> <span id="viewEventLocation">Bronromme</span></p>
+                  <p class="mb-1"><strong>Nombre d'invités:</strong> <span id="viewEventGuests">150</span></p>
+                  <p class="mb-1"><strong>Budget estimé:</strong> <span id="viewEventBudget">1250€ - 1500€</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-12">
+              <h6 class="text-muted">Services demandés</h6>
+              <div class="d-flex flex-wrap gap-2 mb-3">
+                <span class="badge bg-primary p-2">DJ</span>
+                <span class="badge bg-info p-2">Saxophoniste</span>
+              </div>
+              <h6 class="text-muted">Notes client</h6>
+              <div class="p-3 bg-light rounded mb-3" id="viewClientNotes">
+                Nous cherchons un DJ pour notre mariage le 29 novembre 2025. Nous aimerions avoir un saxophoniste pour l'apéritif et le repas. Notre style musical est plutôt varié, avec une préférence pour les années 80-90 et la musique actuelle. Merci de nous contacter pour en discuter.
+              </div>
+              <h6 class="text-muted">Notes internes</h6>
+              <div class="p-3 bg-light rounded" id="viewInternalNotes">
+                Premier contact planifié pour le 15/03. Vérifier disponibilité du saxophoniste pour cette date.
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="row mb-4">
+            <div class="col-12">
+              <h6 class="text-muted">Historique des actions</h6>
+              <div class="timeline">
+                <div class="timeline-item">
+                  <div class="timeline-date">12/03/2025</div>
+                  <div class="timeline-content">
+                    <p class="mb-0"><strong>Demande créée</strong> par le client via le site web.</p>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-date">12/03/2025</div>
+                  <div class="timeline-content">
+                    <p class="mb-0"><strong>Email de confirmation</strong> envoyé automatiquement.</p>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-date">13/03/2025</div>
+                  <div class="timeline-content">
+                    <p class="mb-0"><strong>Demande assignée</strong> à Admin.</p>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-date">13/03/2025</div>
+                  <div class="timeline-content">
+                    <p class="mb-0"><strong>Rappel de suivi</strong> programmé pour le 15/03/2025.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="d-flex justify-content-between w-100">
+            <div>
+              <button type="button" class="btn btn-outline-danger me-2" id="deleteRequest">Supprimer</button>
+            </div>
+            <div>
+              <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary me-2" id="editRequest">Modifier</button>
+              <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  Actions
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#" id="sendEmailToClient"><i class="fas fa-envelope me-2"></i>Envoyer un email</a></li>
+                  <li><a class="dropdown-item" href="#" id="scheduleFollowUp"><i class="fas fa-calendar me-2"></i>Planifier un suivi</a></li>
+                  <li><a class="dropdown-item" href="#" id="createQuote"><i class="fas fa-file-invoice me-2"></i>Créer un devis</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#" id="convertToEvent"><i class="fas fa-calendar-plus me-2"></i>Convertir en événement</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+  <script>
+    // Basculement de la sidebar
+    document.getElementById('toggleSidebar').addEventListener('click', function() {
+      var sidebar = document.getElementById('sidebar');
+      var mainContent = document.getElementById('mainContent');
+      sidebar.classList.toggle('collapsed');
+      mainContent.classList.toggle('expanded');
+      // Mettre à jour l'attribut aria-expanded
+      this.setAttribute('aria-expanded', sidebar.classList.contains('collapsed') ? 'false' : 'true');
+    });
+
+    // Toggle sidebar sur mobile
+    document.getElementById('mobileToggle').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('mobile-visible');
+    });
+
+    // Initialisation de DataTable
+    $(document).ready(function() {
+      $('#serviceRequestsTable').DataTable({
+        "paging": false,
+        "info": false,
+        "searching": false
+      });
+
+      // Changement entre client existant et nouveau client
+      $('#clientType').change(function() {
+        if ($(this).val() === 'new') {
+          $('#existingClientContainer').hide();
+          $('#newClientContainer').show();
+        } else if ($(this).val() === 'existing') {
+          $('#existingClientContainer').show();
+          $('#newClientContainer').hide();
+        } else {
+          $('#existingClientContainer').hide();
+          $('#newClientContainer').hide();
+        }
+      });
+
+      // Affichage des détails d'une demande
+      $('.view-request').click(function(e) {
+        e.preventDefault();
+        $('#viewRequestModal').modal('show');
+      });
+
+      // Edition d'une demande
+      $('.edit-request').click(function(e) {
+        e.preventDefault();
+        $('#newRequestModal').modal('show');
+      });
+
+      // Confirmation de suppression
+      $('.delete-request').click(function(e) {
+        e.preventDefault();
+        if (confirm('Êtes-vous sûr de vouloir supprimer cette demande ?')) {
+          alert('Demande supprimée avec succès');
+        }
+      });
+
+      // Sélectionner toutes les checkboxes
+      $('#selectAll').change(function() {
+        $('input[type="checkbox"]').prop('checked', $(this).prop('checked'));
+      });
+    });
+  </script>
+</body>
+</html>

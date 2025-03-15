@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DJ Prestige Sound - Gestion des événements</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
+    <link rel="stylesheet" href="assets/css/admin-style.css">
+</head>
+<body>
+    <!-- Sidebar (identique sur toutes les pages) -->
+    <div class="sidebar" id="sidebar">
+        <!-- Contenu du sidebar comme dans les autres pages -->
+        <div class="sidebar-header">
+            <div class="d-flex align-items-center">
+                <div class="music-waves">
+                    <div class="music-wave"></div>
+                    <div class="music-wave"></div>
+                    <div class="music-wave"></div>
+                    <div class="music-wave"></div>
+                </div>
+                <span class="logo-text">DJ Prestige Sound</span>
+            </div>
+            <button class="toggle-btn" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="admin-dashboard.php" class="menu-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Tableau de bord</span>
+            </a>
+            
+            <div class="menu-category">Gestion des demandes</div>
+            
+            <a href="admin-service-requests.php" class="menu-item">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Demandes de service</span>
+            </a>
+            
+            <a href="admin-events.php" class="menu-item active">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Événements</span>
+            </a>
+            
+            <!-- Reste du menu comme dans les autres pages -->
+            <div class="menu-category">Catalogue</div>
+            
+            <a href="admin-music-library.php" class="menu-item">
+                <i class="fas fa-music"></i>
+                <span>Bibliothèque musicale</span>
+            </a>
+            
+            <a href="admin-equipment.php" class="menu-item">
+                <i class="fas fa-sliders-h"></i>
+                <span>Équipement</span>
+            </a>
+            
+            <a href="admin-inventory.php" class="menu-item">
+                <i class="fas fa-boxes"></i>
+                <span>Inventaire</span>
+            </a>
+            
+            <div class="menu-category">Équipe</div>
+            
+            <a href="admin-staff.php" class="menu-item">
+                <i class="fas fa-id-card"></i>
+                <span>Personnel</span>
+            </a>
+            
+            <a href="admin-scheduling.php" class="menu-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Planification</span>
+            </a>
+            
+            <div class="menu-category">Commercial</div>
+            
+            <a href="admin-invoices.php" class="menu-item">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span>Facturation</span>
+            </a>
+            
+            <a href="admin-marketing.php" class="menu-item">
+                <i class="fas fa-bullhorn"></i>
+                <span>Marketing</span>
+            </a>
+            
+            <a href="admin-venues.php" class="menu-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Lieux & Partenaires</span>
+            </a>
+            
+            <div class="menu-category">Utilisateurs</div>
+            
+            <a href="admin-users.php" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>Clients</span>
+            </a>
+            
+            <a href="admin-providers.php" class="menu-item">
+                <i class="fas fa-user-tie"></i>
+                <span>Prestataires</span>
+            </a>
+            
+            <a href="admin-reviews.php" class="menu-item">
+                <i class="fas fa-star"></i>
+                <span>Avis clients</span>
+            </a>
+            
+            <div class="menu-category">Système</div>
+            
+            <a href="admin-settings.php" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span>Paramètres</span>
+            </a>
+            
+            <a href="admin-logs.php" class="menu-item">
+                <i class="fas fa-history"></i>
+                <span>Logs</span>
+            </a>
+            
+            <a href="admin-analytics.php" class="menu-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>Analytiques</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <img src="https://via.placeholder.com/40x40" alt="Admin Avatar">
+                </div>
+                <div class="user-details">
+                    <p class="user-name">Admin</p>
+                    <p class="user-role">Administrateur</p>
+                </div>
+                <a href="logout.php" class="logout-btn" title="Déconnexion">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="mobile-toggle d-md-none" id="mobileToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        
+        <div class="top-bar">
+            <h1 class="page-title">Gestion des événements</h1>
+            <div class="d-flex align-items-center">
+                <div class="notification-icon me-3">
+                    <i class="fas fa-bell fa-lg"></i>
+                    <span class="notification-badge">5</span>
+                </div>
+                
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="quickActions" data-bs-toggle="dropdown" aria-expanded="false">
+                        Actions rapides
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="quickActions">
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#newEventModal"><i class="fas fa-plus-circle me-2"></i> Nouvel événement</a></li>
+                        <li><a class="dropdown-item" href="#" id="printSchedule"><i class="fas fa-print me-2"></i> Imprimer planning</a></li>
+                        <li><a class="dropdown-item" href="#" id="exportEvents"><i class="fas fa-file-export me-2"></i> Exporter événements</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="admin-service-requests.php"><i class="fas fa-clipboard-list me-2"></i> Demandes de service</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vue par onglets -->
+        <ul class="nav nav-tabs mb-4" id="eventsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="calendar-tab" data-bs-toggle="tab" data-bs-target="#calendar" type="button" role="tab" aria-controls="calendar" aria-selected="true">Calendrier</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button" role="tab" aria-controls="list" aria-selected="false">Liste</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="kanban-tab" data-bs-toggle="tab" data-bs-target="#kanban" type="button" role="tab" aria-controls="kanban" aria-selected="false">Kanban</button>
+            </li>
+        </ul>
+        
+        <!-- Contenu des onglets -->
+        <div class="tab-content">
+            <!-- Onglet Calendrier -->
+            <div class="tab-pane fade show active" id="calendar" role="tabpanel" aria-labelledby="calendar-tab">
+                <div class="dashboard-section mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="section-title mb-0">Calendrier des événements</h2>
+                        <div class="btn-group">
+                            <button class="btn btn-outline-primary" id="todayBtn">Aujourd'hui</button>
+                            <button class="btn btn-outline-primary" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+                            <button class="btn btn-outline-primary" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="calendar-container" id="eventsCalendar" style="height: 700px;"></div>
+                </div>
+            </div>
+            
+            <!-- Onglet Liste -->
+            <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="list-tab">
+                <!-- Filtres -->
+                <div class="dashboard-section mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="eventStatusFilter" class="form-label">Statut</label>
+                            <select class="form-select" id="eventStatusFilter">
+                                <option value="">Tous les statuts</option>
+                                <option value="upcoming">À venir</option>
+                                <option value="in_progress">En cours</option>
+                                <option value="completed">Terminé</option>
+                                <option value="cancelled">Annulé</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="eventTypeFilter" class="form-label">Type</label>
+                            <select class="form-select" id="eventTypeFilter">
+                                <option value="">Tous les types</option>
+                                <option value="wedding">Mariage</option>
+                                <option value="birthday">Anniversaire</option>
+                                <option value="corporate">Événement d'entreprise</option>
+                                <option value="party">Soirée</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="eventPeriodFilter" class="form-label">Période</label>
+                            <select class="form-select" id="eventPeriodFilter">
+                                <option value="all">Toutes les périodes</option>
+                                <option value="today">Aujourd'hui</option>
+                                <option value="this_week">Cette semaine</option>
+                                <option value="this_month">Ce mois</option>
+                                <option value="next_month">Mois prochain</option>
+                                <option value="custom">Période personnalisée</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="staffFilter" class="form-label">Personnel assigné</label>
+                            <select class="form-select" id="staffFilter">
+                                <option value="">Tout le personnel</option>
+                                <option value="1">DJ Alex</option>
+                                <option value="2">DJ Max</option>
+                                <option value="3">DJ Mike</option>
+                                <option value="4">Tous les DJ</option>
+                            </select>
+                        </div>
+                        <div class="col-12 d-flex">
+                            <button class="btn btn-primary me-2" id="applyEventsFilters"><i class="fas fa-filter me-2"></i>Appliquer les filtres</button>
+                            <button class="btn btn-outline-secondary" id="resetEventsFilters"><i class="fas fa-undo me-2"></i>Réinitialiser</button>
+                            
+                            <div class="ms-auto">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="searchEvents" placeholder="Rechercher...">
+                                    <button class="btn btn-outline-primary" type="button" id="searchEventsButton">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats rapides -->
+                <div class="row mb-4">
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon primary">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Événements à venir</p>
+                                <h2 class="card-value">28</h2>
+                                <p class="card-info">Dans les 30 prochains jours: 8</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Terminés (2025)</p>
+                                <h2 class="card-value">43</h2>
+                                <p class="card-info">Note moyenne: 4.8/5</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                        <div class="dashboard-card">
+                            <div class="card-icon info">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Personnel disponible</p>
+                                <h2 class="card-value">5/7</h2>
+                                <p class="card-info">Pour ce week-end</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="dashboard-card">
+                            <div class="card-icon warning">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="card-title">Équipement requis</p>
+                                <h2 class="card-value">15</h2>
+                                <p class="card-info">Items à vérifier: 3</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Liste des événements -->
+                <div class="dashboard-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="section-title mb-0">Liste des événements</h2>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newEventModal">
+                            <i class="fas fa-plus-circle me-2"></i>Nouvel événement
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table align-middle" id="eventsTable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="selectAllEvents">
+                                        </div>
+                                    </th>
+                                    <th>Client</th>
+                                    <th>Date et heure</th>
+                                    <th>Type</th>
+                                    <th>Lieu</th>
+                                    <th>Services</th>
+                                    <th>Personnel</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="1">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Martin & Julie</p>
+                                                <small>martin.julie@gmail.com</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>17/03/2025</div>
+                                        <small class="text-muted">18:00 - 04:00</small>
+                                    </td>
+                                    <td>Mariage</td>
+                                    <td>La Ferme de la Pitance</td>
+                                    <td>
+                                        <span class="badge bg-primary">DJ</span>
+                                        <span class="badge bg-secondary">Éclairage</span>
+                                        <span class="badge bg-info">Cérémonie</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/25x25" class="rounded-circle me-1" width="25" height="25" alt="DJ">
+                                            <span>DJ Alex</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-success">Confirmé</span></td>
+                                    <td>
+                                        <a href="#" class="action-btn view-event" data-id="1" title="Voir"><i class="fas fa-eye"></i></a>
+                                        <a href="#" class="action-btn edit-event" data-id="1" title="Modifier"><i class="fas fa-edit"></i></a>
+                                        <a href="#" class="action-btn" title="Créer facture"><i class="fas fa-file-invoice-dollar"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="2">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Entreprise XYZ</p>
+                                                <small>contact@xyz.be</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>25/03/2025</div>
+                                        <small class="text-muted">19:30 - 23:30</small>
+                                    </td>
+                                    <td>Corporate</td>
+                                    <td>Radisson Blu Liège</td>
+                                    <td>
+                                        <span class="badge bg-primary">DJ</span>
+                                        <span class="badge bg-secondary">Sonorisation</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/25x25" class="rounded-circle me-1" width="25" height="25" alt="DJ">
+                                            <span>DJ Max</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-success">Confirmé</span></td>
+                                    <td>
+                                        <a href="#" class="action-btn view-event" data-id="2" title="Voir"><i class="fas fa-eye"></i></a>
+                                        <a href="#" class="action-btn edit-event" data-id="2" title="Modifier"><i class="fas fa-edit"></i></a>
+                                        <a href="#" class="action-btn" title="Créer facture"><i class="fas fa-file-invoice-dollar"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="3">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Laurent & Sophie</p>
+                                                <small>laurent.sophie@gmail.com</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>02/04/2025</div>
+                                        <small class="text-muted">17:00 - 03:00</small>
+                                    </td>
+                                    <td>Mariage</td>
+                                    <td>Château de Modave</td>
+                                    <td>
+                                        <span class="badge bg-primary">DJ</span>
+                                        <span class="badge bg-secondary">Éclairage</span>
+                                        <span class="badge bg-secondary">Sonorisation</span>
+                                        <span class="badge bg-info">Saxophoniste</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/25x25" class="rounded-circle me-1" width="25" height="25" alt="DJ">
+                                            <span>DJ Alex</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-success">Confirmé</span></td>
+                                    <td>
+                                        <a href="#" class="action-btn view-event" data-id="3" title="Voir"><i class="fas fa-eye"></i></a>
+                                        <a href="#" class="action-btn edit-event" data-id="3" title="Modifier"><i class="fas fa-edit"></i></a>
+                                        <a href="#" class="action-btn" title="Créer facture"><i class="fas fa-file-invoice-dollar"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="4">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">Commune de Liège</p>
+                                                <small>evenements@liege.be</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>15/04/2025</div>
+                                        <small class="text-muted">14:00 - 22:00</small>
+                                    </td>
+                                    <td>Événement public</td>
+                                    <td>Place Saint-Lambert</td>
+                                    <td>
+                                        <span class="badge bg-primary">DJ</span>
+                                        <span class="badge bg-secondary">Sonorisation</span>
+                                        <span class="badge bg-secondary">Éclairage</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/25x25" class="rounded-circle me-1" width="25" height="25" alt="DJ">
+                                            <span>DJ Max</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-primary">En préparation</span></td>
+                                    <td>
+                                        <a href="#" class="action-btn view-event" data-id="4" title="Voir"><i class="fas fa-eye"></i></a>
+                                        <a href="#" class="action-btn edit-event" data-id="4" title="Modifier"><i class="fas fa-edit"></i></a>
+                                        <a href="#" class="action-btn" title="Créer facture"><i class="fas fa-file-invoice-dollar"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="5">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/40x40" class="rounded-circle me-2" width="40" height="40" alt="Avatar">
+                                            <div>
+                                                <p class="mb-0 fw-bold">École Saint-Louis</p>
+                                                <small>direction@saintlouis.be</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>10/05/2025</div>
+                                        <small class="text-muted">12:00 - 20:00</small>
+                                    </td>
+                                    <td>Fancy-fair</td>
+                                    <td>École Saint-Louis</td>
+                                    <td>
+                                        <span class="badge bg-primary">DJ</span>
+                                        <span class="badge bg-secondary">Sonorisation</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/25x25" class="rounded-circle me-1" width="25" height="25" alt="DJ">
+                                            <span>DJ Mike</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-warning text-dark">Acompte en attente</span></td>
+                                    <td>
+                                        <a href="#" class="action-btn view-event" data-id="5" title="Voir"><i class="fas fa-eye"></i></a>
+                                        <a href="#" class="action-btn edit-event" data-id="5" title="Modifier"><i class="fas fa-edit"></i></a>
+                                        <a href="#" class="action-btn" title="Créer facture"><i class="fas fa-file-invoice-dollar"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <div class="text-muted">Affichage de 1 à 5 sur 28 événements</div>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li class="page-item disabled"><a class="page-link" href="#"><i class="fas fa-angle-double-left"></i></a></li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                <li class="page-item"><a class="page-link" href="#"><i class="fas fa-angle-double-right"></i></a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Kanban -->
+            <div class="tab-pane fade" id="kanban" role="tabpanel" aria-labelledby="kanban-tab">
+                <div class="dashboard-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="section-title mb-0">Tableau Kanban des événements</h2>
+                        <div>
+                            <button class="btn btn-outline-primary me-2"><i class="fas fa-filter me-2"></i>Filtrer</button>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newEventModal">
+                                <i class="fas fa-plus-circle me-2"></i>Nouvel événement
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="kanban-board">
+                        <div class="row g-3">
+                            <!-- Colonne 1: En préparation -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="kanban-column">
+                                    <div class="kanban-column-header bg-primary text-white">
+                                        <h5 class="mb-0">En préparation</h5>
+                                        <span class="badge bg-white text-primary">3</span>
+                                    </div>
+                                    <div class="kanban-column-content">
+                                        <div class="kanban-card">
+                                            <div class="kanban-card-header">
+                                                <span class="event-date">15/04/2025</span>
+                                                <span class="event-type">Événement public</span>
+                                            </div>
+                                            <div class="kanban-card-body">
+                                                <h6>Commune de Liège</h6>
+                                                <p class="mb-2">Place Saint-Lambert</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <span class="badge bg-primary">DJ</span>
+                                                        <span class="badge bg-secondary">Sono</span>
+                                                    </div>
+                                                    <div class="avatar-group">
+                                                        <img src="https://via.placeholder.com/25x25" class="rounded-circle" width="25" height="25" alt="DJ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="kanban-card-footer">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="kanban-card">
+                                            <div class="kanban-card-header">
+                                                <span class="event-date">12/06/2025</span>
+                                                <span class="event-type">Mariage</span>
+                                            </div>
+                                            <div class="kanban-card-body">
+                                                <h6>Thomas & Manon</h6>
+                                                <p class="mb-2">Château de Limont</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <span class="badge bg-primary">DJ</span>
+                                                        <span class="badge bg-info">Cérémonie</span>
+                                                    </div>
+                                                    <div class="avatar-group">
+                                                        <img src="https://via.placeholder.com/25x25" class="rounded-circle" width="25" height="25" alt="DJ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="kanban-card-footer">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="kanban-card">
+                                            <div class="kanban-card-header">
+                                                <span class="event-date">28/06/2025</span>
+                                                <span class="event-type">Anniversaire</span>
+                                            </div>
+                                            <div class="kanban-card-body">
+                                                <h6>Patricia (50 ans)</h6>
+                                                <p class="mb-2">Salle Le Tremplin</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <span class="badge bg-primary">DJ</span>
+                                                    </div>
+                                                    <div class="avatar-group">
+                                                        <img src="https://via.placeholder.com/25x25" class="rounded-circle" width="25" height="25" alt="DJ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="kanban-card-footer">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Colonne 2: Acompte en attente -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="kanban-column">
+                                    <div class="kanban-column-header bg-warning text-dark">
+                                        <h5 class="mb-0">Acompte en attente</h5>
+                                        <span class="badge bg-white text-warning">2</span>
+                                    </div>
+                                    <div class="kanban-column-content">
+                                        <div class="kanban-card">
+                                            <div class="kanban-card-header">
+                                                <span class="event-date">10/05/2025</span>
+                                                <span class="event-type">Fancy-fair</span>
+                                            </div>
+                                            <div class="kanban-card-body">
+                                                <h6>École Saint-Louis</h6>
+                                                <p class="mb-2">École Saint-Louis</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <span class="badge bg-primary">DJ</span>
+                                                        <span class="badge bg-secondary">Sono</span>
+                                                    </div>
+                                                    <div class="avatar-group">
+                                                        <img src="https://via.placeholder.com/25x25" class="rounded-circle" width="25" height="25" alt="DJ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="kanban-card-footer">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="kanban-card">
+                                            <div class="kanban-card-header">
+                                                <span class="event-date">30/08/2025</span>
+                                                <span class="event-type">Mariage</span>
+                                            </div>
+                                            <div class="kanban-card-body">
+                                                <h6>Philippe & Marie</h6>
+                                                <p class="mb-2">Château Jemeppe</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <span class="badge bg-primary">DJ</span>
+                                                        <span class="badge bg-secondary">Éclairage</span>
+                                                        <span class="badge bg-info">Saxo</span>
+                                                    </div>
+                                                    <div class="avatar-group">
+                                                        <img src="https://via.placeholder.com/25x25" class="rounded-circle" width="25" height="25" alt="DJ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="kanban-card-footer">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Colonne 3: Confirmé -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="kanban-column">
+                                    <div class="kanban-column-header bg-success text-white">
+                                        <h5 class="mb-0">Confirmé</h5>
+                                        <span class="badge bg-white text-success">3</span>
+                                    </div>
+                                    <div class="kanban-column-content">
+                                        <div class="kanban-card">
+                                            <div class="kanban-card-header">
+                                                <span class="event-date">17/03/2025</span>
+                                                <span class="event-type">Mariage</span>
+                                            </div>
+                                            <div class="kanban-card-body">
+                                                <h6>Martin & Julie</h6>
+                                                <p class="mb-2">La Ferme de la Pitance</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <span class="badge bg-primary">DJ</span>
+                                                        <span class="badge bg-secondary">Éclairage</span>
+                                                        <span class="badge bg-info">Cérémonie</span>
+                                                    </div>
+                                                    <div class="avatar-group">
+                                                        <img src="https://via.placeholder.com/25x25" class="rounded-circle" width="25" height="25" alt="DJ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="kanban-card-footer">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="kanban-card">
+                                            <div class="kanban-card-header">
+                                                <span class="event-date">25/03/2025</span>
+                                                <span class="event-type">Corporate</span>
+                                            </div>
+                                            <div class="kanban-card-body">
+                                                <h6>Entreprise XYZ</h6>
+                                                <p class="mb-2">Radisson Blu Liège</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <span class="badge bg-primary">DJ</span>
+                                                        <span class="badge bg-secondary">Sono</span>
+                                                    </div>
+                                                    <div class="avatar-group">
+                                                        <img src="https://via.placeholder.com/25x25" class="rounded-circle" width="25" height="25" alt="DJ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="kanban-card-footer">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="kanban-card">
+                                            <div class="kanban-card-header">
+                                                <span class="event-date">02/04/2025</span>
+                                                <span class="event-type">Mariage</span>
+                                            </div>
+                                            <div class="kanban-card-body">
+                                                <h6>Laurent & Sophie</h6>
+                                                <p class="mb-2">Château de Modave</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <span class="badge bg-primary">DJ</span>
+                                                        <span class="badge bg-secondary">Sono+Lumière</span>
+                                                        <span class="badge bg-info">Saxo</span>
+                                                    </div>
+                                                    <div class="avatar-group">
+                                                        <img src="https://via.placeholder.com/25x25" class="rounded-circle" width="25" height="25" alt="DJ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="kanban-card-footer">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Colonne 4: Terminé -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="kanban-column">
+                                    <div class="kanban-column-header bg-secondary text-white">
+                                        <h5 class="mb-0">Terminé</h5>
+                                        <span class="badge bg-white text-secondary">2</span>
+                                    </div>
+                                    <div class="kanban-column-content">
+                                        <div class="kanban-card">
+                                            <div class="kanban-card-header">
+                                                <span class="event-date">10/03/2025</span>
+                                                <span class="event-type">Corporate</span>
+                                            </div>
+                                            <div class="kanban-card-body">
+                                                <h6>Cabinet Avocats LMT</h6>
+                                                <p class="mb-2">Palais des Congrès</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <span class="badge bg-primary">DJ</span>
+                                                        <span class="badge bg-secondary">Sono</span>
+                                                    </div>
+                                                    <div class="avatar-group">
+                                                        <img src="https://via.placeholder.com/25x25" class="rounded-circle" width="25" height="25" alt="DJ">
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2">
+                                                    <span class="badge bg-success"><i class="fas fa-star"></i> 5/5</span>
+                                                    <span class="badge bg-success"><i class="fas fa-check"></i> Payé</span>
+                                                </div>
+                                            </div>
+                                            <div class="kanban-card-footer">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-file-alt"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-redo"></i></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="kanban-card">
+                                            <div class="kanban-card-header">
+                                                <span class="event-date">05/03/2025</span>
+                                                <span class="event-type">Anniversaire</span>
+                                            </div>
+                                            <div class="kanban-card-body">
+                                                <h6>Anniversaire Marc (40 ans)</h6>
+                                                <p class="mb-2">Le Moderne (Liège)</p>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <span class="badge bg-primary">DJ</span>
+                                                    </div>
+                                                    <div class="avatar-group">
+                                                        <img src="https://via.placeholder.com/25x25" class="rounded-circle" width="25" height="25" alt="DJ">
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2">
+                                                    <span class="badge bg-success"><i class="fas fa-star"></i> 4.8/5</span>
+                                                    <span class="badge bg-success"><i class="fas fa-check"></i> Payé</span>
+                                                </div>
+                                            </div>
+                                            <div class="kanban-card-footer">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-file-alt"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-redo"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal: Nouvel événement -->
+    <div class="modal fade" id="newEventModal" tabindex="-1" aria-labelledby="newEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newEventModalLabel">Nouvel événement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="newEventForm">
+                        <ul class="nav nav-tabs mb-4" id="eventFormTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">Général</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="services-tab" data-bs-toggle="tab" data-bs-target="#services" type="button" role="tab" aria-controls="services" aria-selected="false">Services & Équipement</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="staff-tab" data-bs-toggle="tab" data-bs-target="#staff" type="button" role="tab" aria-controls="staff" aria-selected="false">Personnel</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="planning-tab" data-bs-toggle="tab" data-bs-target="#planning" type="button" role="tab" aria-controls="planning" aria-selected="false">Planning</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="financial-tab" data-bs-toggle="tab" data-bs-target="#financial" type="button" role="tab" aria-controls="financial" aria-selected="false">Finances</button>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content">
+                            <!-- Onglet Général -->
+                            <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                                <!-- Informations client -->
+                                <h6 class="form-section-title">Informations client</h6>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="clientType" class="form-label">Type de client</label>
+                                        <select class="form-select" id="clientType" required>
+                                            <option value="">Sélectionner</option>
+                                            <option value="existing">Client existant</option>
+                                            <option value="new">Nouveau client</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6" id="existingClientContainer">
+                                        <label for="existingClient" class="form-label">Sélectionner un client</label>
+                                        <select class="form-select" id="existingClient">
+                                            <option value="">Sélectionner un client</option>
+                                            <option value="1">Nicolas Bernard</option>
+                                            <option value="2">Jenny & Samir</option>
+                                            <option value="3">Alicia Hody</option>
+                                            <option value="4">Cloé Mathys</option>
+                                            <option value="5">Christelle De Mol</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div id="newClientContainer" style="display: none;">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="clientName" class="form-label">Nom complet</label>
+                                            <input type="text" class="form-control" id="clientName">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="clientEmail" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="clientEmail">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="clientPhone" class="form-label">Téléphone</label>
+                                            <input type="tel" class="form-control" id="clientPhone">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="clientAddress" class="form-label">Adresse</label>
+                                            <input type="text" class="form-control" id="clientAddress">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Informations événement -->
+                                <h6 class="form-section-title mt-4">Informations événement</h6>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="eventType" class="form-label">Type d'événement</label>
+                                        <select class="form-select" id="eventType" required>
+                                            <option value="">Sélectionner</option>
+                                            <option value="wedding">Mariage</option>
+                                            <option value="birthday">Anniversaire</option>
+                                            <option value="corporate">Événement d'entreprise</option>
+                                            <option value="party">Soirée</option>
+                                            <option value="other">Autre</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="eventName" class="form-label">Nom de l'événement</label>
+                                        <input type="text" class="form-control" id="eventName" placeholder="ex: Mariage Martin & Julie">
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="eventDate" class="form-label">Date</label>
+                                        <input type="date" class="form-control" id="eventDate" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="eventStartTime" class="form-label">Heure de début</label>
+                                        <input type="time" class="form-control" id="eventStartTime">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="eventEndTime" class="form-label">Heure de fin</label>
+                                        <input type="time" class="form-control" id="eventEndTime">
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="eventLocation" class="form-label">Lieu</label>
+                                        <input type="text" class="form-control" id="eventLocation" placeholder="Nom du lieu">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="eventAddress" class="form-label">Adresse</label>
+                                        <input type="text" class="form-control" id="eventAddress" placeholder="Adresse complète">
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="eventGuests" class="form-label">Nombre d'invités</label>
+                                        <input type="number" class="form-control" id="eventGuests">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="eventStatus" class="form-label">Statut</label>
+                                        <select class="form-select" id="eventStatus" required>
+                                            <option value="preparation">En préparation</option>
+                                            <option value="deposit_waiting">Acompte en attente</option>
+                                            <option value="confirmed">Confirmé</option>
+                                            <option value="completed">Terminé</option>
+                                            <option value="cancelled">Annulé</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="eventNotes" class="form-label">Notes et instructions</label>
+                                        <textarea class="form-control" id="eventNotes" rows="3" placeholder="Instructions, demandes spéciales, etc."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Onglet Services & Équipement -->
+                            <div class="tab-pane fade" id="services" role="tabpanel" aria-labelledby="services-tab">
+                                <h6 class="form-section-title">Services demandés</h6>
+                                <div class="row mb-4">
+                                    <div class="col-md-12">
+                                        <div class="d-flex flex-wrap gap-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="dj" id="serviceDJ">
+                                                <label class="form-check-label" for="serviceDJ">DJ</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="sound" id="serviceSound">
+                                                <label class="form-check-label" for="serviceSound">Sonorisation</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="lighting" id="serviceLighting">
+                                                <label class="form-check-label" for="serviceLighting">Éclairage</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="ceremony" id="serviceCeremony">
+                                                <label class="form-check-label" for="serviceCeremony">Cérémonie Laïque</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="photo" id="servicePhoto">
+                                                <label class="form-check-label" for="servicePhoto">Photographe</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="saxophone" id="serviceSaxophone">
+                                                <label class="form-check-label" for="serviceSaxophone">Saxophoniste</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h6 class="form-section-title">Équipement requis</h6>
+                                <div class="row mb-4">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table" id="equipmentTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Équipement</th>
+                                                        <th>Catégorie</th>
+                                                        <th>Quantité</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <select class="form-select equipment-select">
+                                                                <option value="">Sélectionner...</option>
+                                                                <option value="1">Système Sono Complet</option>
+                                                                <option value="2">Pack Éclairage Standard</option>
+                                                                <option value="3">Micro sans fil</option>
+                                                                <option value="4">Machine à fumée</option>
+                                                                <option value="5">Projecteur LED</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>Sonorisation</td>
+                                                        <td><input type="number" class="form-control" value="1"></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-primary" id="addEquipmentRow">
+                                            <i class="fas fa-plus me-2"></i>Ajouter un équipement
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <h6 class="form-section-title">Style musical</h6>
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <textarea class="form-control" id="musicStyle" rows="3" placeholder="Précisez les préférences musicales, artistes, genres, périodes, etc."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Onglet Personnel -->
+                            <div class="tab-pane fade" id="staff" role="tabpanel" aria-labelledby="staff-tab">
+                                <h6 class="form-section-title">Assignation du personnel</h6>
+                                <div class="row mb-4">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table" id="staffTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Rôle</th>
+                                                        <th>Personnel</th>
+                                                        <th>Horaire</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <select class="form-select">
+                                                                <option value="dj">DJ</option>
+                                                                <option value="technician">Technicien</option>
+                                                                <option value="assistant">Assistant</option>
+                                                                <option value="photographer">Photographe</option>
+                                                                <option value="saxophonist">Saxophoniste</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <select class="form-select">
+                                                                <option value="">Sélectionner...</option>
+                                                                <option value="1">DJ Alex</option>
+                                                                <option value="2">DJ Max</option>
+                                                                <option value="3">DJ Mike</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group">
+                                                                <input type="time" class="form-control" placeholder="Début">
+                                                                <span class="input-group-text">-</span>
+                                                                <input type="time" class="form-control" placeholder="Fin">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-primary" id="addStaffRow">
+                                            <i class="fas fa-plus me-2"></i>Ajouter un membre
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <h6 class="form-section-title">Notes pour l'équipe</h6>
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <textarea class="form-control" id="staffNotes" rows="3" placeholder="Instructions spécifiques pour l'équipe..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Onglet Planning -->
+                            <div class="tab-pane fade" id="planning" role="tabpanel" aria-labelledby="planning-tab">
+                                <h6 class="form-section-title">Planning de l'événement</h6>
+                                <div class="row mb-4">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table" id="planningTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Heure</th>
+                                                        <th>Activité</th>
+                                                        <th>Description</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><input type="time" class="form-control" value="18:00"></td>
+                                                        <td><input type="text" class="form-control" placeholder="Activité" value="Arrivée des invités"></td>
+                                                        <td><input type="text" class="form-control" placeholder="Description" value="Musique d'ambiance"></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="time" class="form-control" value="19:30"></td>
+                                                        <td><input type="text" class="form-control" placeholder="Activité" value="Dîner"></td>
+                                                        <td><input type="text" class="form-control" placeholder="Description" value="Musique douce d'accompagnement"></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="time" class="form-control" value="22:00"></td>
+                                                        <td><input type="text" class="form-control" placeholder="Activité" value="Ouverture de bal"></td>
+                                                        <td><input type="text" class="form-control" placeholder="Description" value="Premier dance des mariés"></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-primary" id="addPlanningRow">
+                                            <i class="fas fa-plus me-2"></i>Ajouter une étape
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <h6 class="form-section-title">Logistique</h6>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="setupTime" class="form-label">Horaire de montage</label>
+                                        <input type="time" class="form-control" id="setupTime" value="15:00">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="breakdownTime" class="form-label">Horaire de démontage</label>
+                                        <input type="time" class="form-control" id="breakdownTime" value="04:30">
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="logisticsNotes" class="form-label">Notes logistiques</label>
+                                        <textarea class="form-control" id="logisticsNotes" rows="3" placeholder="Informations sur l'accès, le stationnement, le déchargement, etc."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Onglet Finances -->
+                            <div class="tab-pane fade" id="financial" role="tabpanel" aria-labelledby="financial-tab">
+                                <h6 class="form-section-title">Tarification</h6>
+                                <div class="row mb-4">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table" id="pricingTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Service / Article</th>
+                                                        <th>Détails</th>
+                                                        <th>Prix unitaire (€)</th>
+                                                        <th>Quantité</th>
+                                                        <th>Total (€)</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <select class="form-select">
+                                                                <option value="dj">Prestation DJ</option>
+                                                                <option value="sound">Sonorisation</option>
+                                                                <option value="lighting">Éclairage</option>
+                                                                <option value="ceremony">Cérémonie</option>
+                                                                <option value="saxophone">Saxophoniste</option>
+                                                                <option value="custom">Personnalisé</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><input type="text" class="form-control" value="Prestation complète soirée"></td>
+                                                        <td><input type="number" class="form-control price-unit" value="800"></td>
+                                                        <td><input type="number" class="form-control price-qty" value="1"></td>
+                                                        <td><input type="number" class="form-control price-total" value="800" readonly></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <select class="form-select">
+                                                                <option value="dj">Prestation DJ</option>
+                                                                <option value="sound" selected>Sonorisation</option>
+                                                                <option value="lighting">Éclairage</option>
+                                                                <option value="ceremony">Cérémonie</option>
+                                                                <option value="saxophone">Saxophoniste</option>
+                                                                <option value="custom">Personnalisé</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><input type="text" class="form-control" value="Système son complet"></td>
+                                                        <td><input type="number" class="form-control price-unit" value="300"></td>
+                                                        <td><input type="number" class="form-control price-qty" value="1"></td>
+                                                        <td><input type="number" class="form-control price-total" value="300" readonly></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="4" class="text-end fw-bold">Sous-total</td>
+                                                        <td><input type="number" class="form-control" id="subtotal" value="1100" readonly></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="3" class="text-end">TVA</td>
+                                                        <td><input type="number" class="form-control" id="vatRate" value="21" min="0" max="100">%</td>
+                                                        <td><input type="number" class="form-control" id="vatAmount" value="231" readonly></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" class="text-end fw-bold">Total</td>
+                                                        <td><input type="number" class="form-control" id="totalAmount" value="1331" readonly></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-primary" id="addPricingRow">
+                                            <i class="fas fa-plus me-2"></i>Ajouter un article
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <h6 class="form-section-title">Conditions de paiement</h6>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="depositAmount" class="form-label">Montant de l'acompte (€)</label>
+                                        <input type="number" class="form-control" id="depositAmount" value="400">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="depositDueDate" class="form-label">Date limite acompte</label>
+                                        <input type="date" class="form-control" id="depositDueDate">
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="paymentMethod" class="form-label">Méthode de paiement</label>
+                                        <select class="form-select" id="paymentMethod">
+                                            <option value="bank_transfer">Virement bancaire</option>
+                                            <option value="cash">Espèces</option>
+                                            <option value="check">Chèque</option>
+                                            <option value="card">Carte bancaire</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="balanceDueDate" class="form-label">Date limite solde</label>
+                                        <input type="date" class="form-control" id="balanceDueDate">
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="paymentNotes" class="form-label">Notes de paiement</label>
+                                        <textarea class="form-control" id="paymentNotes" rows="3" placeholder="Informations supplémentaires sur le paiement..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="saveEvent">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    
+    <script>
+        // Toggle sidebar
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.getElementById('mainContent').classList.toggle('expanded');
+        });
+        
+        // Mobile sidebar toggle
+        document.getElementById('mobileToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('mobile-visible');
+        });
+        
+        // Initialize calendar
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('eventsCalendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: '',
+                    center: 'title',
+                    right: ''
+                },
+                events: [
+                    {
+                        title: 'Mariage Martin & Julie',
+                        start: '2025-03-17',
+                        end: '2025-03-18',
+                        backgroundColor: '#28a745'
+                    },
+                    {
+                        title: 'Corporate Entreprise XYZ',
+                        start: '2025-03-25',
+                        end: '2025-03-26',
+                        backgroundColor: '#28a745'
+                    },
+                    {
+                        title: 'Mariage Laurent & Sophie',
+                        start: '2025-04-02',
+                        end: '2025-04-03',
+                        backgroundColor: '#28a745'
+                    },
+                    {
+                        title: 'Événement public Liège',
+                        start: '2025-04-15',
+                        backgroundColor: '#007bff'
+                    },
+                    {
+                        title: 'Fancy-fair École Saint-Louis',
+                        start: '2025-05-10',
+                        backgroundColor: '#ffc107'
+                    },
+                    {
+                        title: 'Mariage Thomas & Manon',
+                        start: '2025-06-12',
+                        backgroundColor: '#007bff'
+                    },
+                    {
+                        title: 'Anniversaire Patricia',
+                        start: '2025-06-28',
+                        backgroundColor: '#007bff'
+                    },
+                    {
+                        title: 'Mariage Philippe & Marie',
+                        start: '2025-08-30',
+                        backgroundColor: '#ffc107'
+                    }
+                ],
+                eventClick: function(info) {
+                    // Ouvrir la modal pour voir/modifier l'événement
+                    $('#newEventModal').modal('show');
+                },
+                dateClick: function(info) {
+                    // Ouvrir la modal pour créer un événement à cette date
+                    $('#eventDate').val(info.dateStr);
+                    $('#newEventModal').modal('show');
+                }
+            });
+            calendar.render();
+            
+            // Boutons de navigation du calendrier
+            document.getElementById('prevBtn').addEventListener('click', function() {
+                calendar.prev();
+            });
+            
+            document.getElementById('nextBtn').addEventListener('click', function() {
+                calendar.next();
+            });
+            
+            document.getElementById('todayBtn').addEventListener('click', function() {
+                calendar.today();
+            });
+        });
+        
+        // Initialize DataTable
+        $(document).ready(function() {
+            $('#eventsTable').DataTable({
+                "paging": false,
+                "info": false,
+                "searching": false
+            });
+            
+            // Toggle new/existing client form
+            $('#clientType').change(function() {
+                if ($(this).val() === 'new') {
+                    $('#existingClientContainer').hide();
+                    $('#newClientContainer').show();
+                } else if ($(this).val() === 'existing') {
+                    $('#existingClientContainer').show();
+                    $('#newClientContainer').hide();
+                } else {
+                    $('#existingClientContainer').hide();
+                    $('#newClientContainer').hide();
+                }
+            });
+            
+            // Calcul automatique des totaux dans la tarification
+            $(document).on('input', '.price-unit, .price-qty', function() {
+                var row = $(this).closest('tr');
+                var price = parseFloat(row.find('.price-unit').val()) || 0;
+                var qty = parseFloat(row.find('.price-qty').val()) || 0;
+                var total = price * qty;
+                row.find('.price-total').val(total.toFixed(2));
+                
+                // Recalculer le sous-total
+                var subtotal = 0;
+                $('.price-total').each(function() {
+                    subtotal += parseFloat($(this).val()) || 0;
+                });
+                $('#subtotal').val(subtotal.toFixed(2));
+                
+                // Recalculer la TVA et le total
+                var vatRate = parseFloat($('#vatRate').val()) || 0;
+                var vatAmount = subtotal * (vatRate / 100);
+                var totalAmount = subtotal + vatAmount;
+                
+                $('#vatAmount').val(vatAmount.toFixed(2));
+                $('#totalAmount').val(totalAmount.toFixed(2));
+            });
+            
+            // Recalculer les totaux quand le taux de TVA change
+            $('#vatRate').on('input', function() {
+                var subtotal = parseFloat($('#subtotal').val()) || 0;
+                var vatRate = parseFloat($(this).val()) || 0;
+                var vatAmount = subtotal * (vatRate / 100);
+                var totalAmount = subtotal + vatAmount;
+                
+                $('#vatAmount').val(vatAmount.toFixed(2));
+                $('#totalAmount').val(totalAmount.toFixed(2));
+            });
+            
+            // Ajouter une ligne d'équipement
+            $('#addEquipmentRow').click(function() {
+                var newRow = `
+                    <tr>
+                        <td>
+                            <select class="form-select equipment-select">
+                                <option value="">Sélectionner...</option>
+                                <option value="1">Système Sono Complet</option>
+                                <option value="2">Pack Éclairage Standard</option>
+                                <option value="3">Micro sans fil</option>
+                                <option value="4">Machine à fumée</option>
+                                <option value="5">Projecteur LED</option>
+                            </select>
+                        </td>
+                        <td>À déterminer</td>
+                        <td><input type="number" class="form-control" value="1"></td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+                $('#equipmentTable tbody').append(newRow);
+            });
+            
+            // Ajouter une ligne de personnel
+            $('#addStaffRow').click(function() {
+                var newRow = `
+                    <tr>
+                        <td>
+                            <select class="form-select">
+                                <option value="dj">DJ</option>
+                                <option value="technician">Technicien</option>
+                                <option value="assistant">Assistant</option>
+                                <option value="photographer">Photographe</option>
+                                <option value="saxophonist">Saxophoniste</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select">
+                                <option value="">Sélectionner...</option>
+                                <option value="1">DJ Alex</option>
+                                <option value="2">DJ Max</option>
+                                <option value="3">DJ Mike</option>
+                            </select>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="time" class="form-control" placeholder="Début">
+                                <span class="input-group-text">-</span>
+                                <input type="time" class="form-control" placeholder="Fin">
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+                $('#staffTable tbody').append(newRow);
+            });
+            
+            // Ajouter une ligne de planning
+            $('#addPlanningRow').click(function() {
+                var newRow = `
+                    <tr>
+                        <td><input type="time" class="form-control"></td>
+                        <td><input type="text" class="form-control" placeholder="Activité"></td>
+                        <td><input type="text" class="form-control" placeholder="Description"></td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+                $('#planningTable tbody').append(newRow);
+            });
+            
+            // Ajouter une ligne de tarification
+            $('#addPricingRow').click(function() {
+                var newRow = `
+                    <tr>
+                        <td>
+                            <select class="form-select">
+                                <option value="dj">Prestation DJ</option>
+                                <option value="sound">Sonorisation</option>
+                                <option value="lighting">Éclairage</option>
+                                <option value="ceremony">Cérémonie</option>
+                                <option value="saxophone">Saxophoniste</option>
+                                <option value="custom">Personnalisé</option>
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control"></td>
+                        <td><input type="number" class="form-control price-unit" value="0"></td>
+                        <td><input type="number" class="form-control price-qty" value="1"></td>
+                        <td><input type="number" class="form-control price-total" value="0" readonly></td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+                $('#pricingTable tbody').append(newRow);
+            });
+            
+            // Supprimer une ligne de tableau (pour tous les tableaux)
+            $(document).on('click', '.btn-outline-danger', function() {
+                $(this).closest('tr').remove();
+                
+                // Si c'est une ligne de tarification, recalculer les totaux
+                if ($(this).closest('table').attr('id') === 'pricingTable') {
+                    var subtotal = 0;
+                    $('.price-total').each(function() {
+                        subtotal += parseFloat($(this).val()) || 0;
+                    });
+                    $('#subtotal').val(subtotal.toFixed(2));
+                    
+                    var vatRate = parseFloat($('#vatRate').val()) || 0;
+                    var vatAmount = subtotal * (vatRate / 100);
+                    var totalAmount = subtotal + vatAmount;
+                    
+                    $('#vatAmount').val(vatAmount.toFixed(2));
+                    $('#totalAmount').val(totalAmount.toFixed(2));
+                }
+            });
+            
+            // Select all checkboxes
+            $('#selectAllEvents').change(function() {
+                $('input[type="checkbox"]').prop('checked', $(this).prop('checked'));
+            });
+        });
+    </script>
+</body>
+</html>
