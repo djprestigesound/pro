@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DJ Prestige Sound - Espace Client</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Ajout du script API pour communication admin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1E1E2C;
+            --secondary-color: #8D7B68;
+            --accent-color: #C8B6A6;
+            --accent2-color: #A4907C;
+            --light-color: #F1EFEF;
+            --white-color: #FFFFFF;
+            --dark-color: #262626;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header styles */
+        .client-header {
+            background-color: var(--white-color);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .logo:hover {
+            color: var(--primary-color);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--danger-color);
+            color: var(--white-color);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-dropdown {
+            margin-left: 15px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            color: var(--dark-color);
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .user-info:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        
+        .notification-icon {
+            position: relative;
+            padding: 10px;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 15px;
+        }
+        
+        .notification-icon:hover {
+            color: var(--accent2-color);
+        }
+        
+        /* Sidebar and Main Content Container */
+        .content-wrapper {
+            display: flex;
+            flex-grow: 1;
+        }
+        
+        /* Sidebar styles */
+        .client-sidebar {
+            width: 260px;
+            background-color: var(--white-color);
+            box-shadow: 2px 0 15px rgba(0,0,0,0.05);
+            padding: 30px 0;
+            position: sticky;
+            top: 82px;
+            height: calc(100vh - 82px);
+            overflow-y: auto;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-title {
+            padding: 0 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 15px;
+            margin-top: 25px;
+        }
+        
+        .sidebar-title:first-child {
+            margin-top: 0;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background-color: rgba(200, 182, 166, 0.1);
+            color: var(--accent2-color);
+        }
+        
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background-color: var(--accent2-color);
+        }
+        
+        .menu-item i {
+            width: 20px;
+            margin-right: 10px;
+            font-size: 1.1rem;
+            color: var(--accent2-color);
+        }
+        
+        /* Main content styles */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            background-color: var(--light-color);
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            background-color: var(--white-color);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 20px;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 20px;
+            background-color: var(--white-color);
+        }
+        
+        /* Event cards */
+        .event-card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            transition: all 0.3s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .event-header {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            padding: 15px;
+            font-weight: 600;
+        }
+        
+        .event-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .event-details {
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .event-detail {
+            margin-bottom: 10px;
+            display: flex;
+        }
+        
+        .event-detail i {
+            color: var(--accent2-color);
+            width: 25px;
+            margin-right: 10px;
+        }
+        
+        .event-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+        
+        .event-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: var(--warning-color);
+        }
+        
+        .status-confirmed {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: var(--success-color);
+        }
+        
+        .status-completed {
+            background-color: rgba(23, 162, 184, 0.2);
+            color: var(--info-color);
+        }
+        
+        .status-cancelled {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: var(--danger-color);
+        }
+        
+        /* Music selection */
+        .music-genres, .music-artists {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .genre-tag, .artist-tag {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background-color: rgba(200, 182, 166, 0.2);
+            color: var(--accent2-color);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .genre-tag:hover, .artist-tag:hover {
+            background-color: var(--accent2-color);
+            color: var(--white-color);
+        }
+        
+        .genre-tag.selected, .artist-tag.selected {
+            background-color: var(--accent2-color);
+            color: var(--white-color);
+        }
+        
+        /* Tables */
+        .table th {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+        
+        .table td {
+            vertical-align: middle;
+            font-size: 0.95rem;
+        }
+        
+        /* Playlist section */
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        
+        .playlist-item:hover {
+            background-color: rgba(200, 182, 166, 0.1);
+        }
+        
+        .playlist-item:last-child {
+            border-bottom: none;
+        }
+        
+        .song-info {
+            flex-grow: 1;
+            margin-left: 15px;
+        }
+        
+        .song-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .song-artist {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+        
+        .song-thumbnail {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .song-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .song-actions {
+            display: flex;
+        }
+        
+        .song-action {
+            border: none;
+            background: none;
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            margin-left: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .song-action:hover {
+            color: var(--accent2-color);
+            transform: scale(1.2);
+        }
+        
+        /* Profile section */
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .profile-avatar:hover .avatar-overlay {
+            opacity: 1;
+        }
+        
+        .profile-form .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .profile-form label {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 991px) {
+            .client-sidebar {
+                width: 70px;
+            }
+            
+            .client-sidebar .sidebar-title {
+                display: none;
+            }
+            
+            .client-sidebar .menu-item span {
+                display: none;
+            }
+            
+            .client-sidebar .menu-item {
+                justify-content: center;
+                padding: 15px;
+            }
+            
+            .client-sidebar .menu-item i {
+                margin-right: 0;
+                font-size: 1.3rem;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .client-sidebar {
+                position: fixed;
+                left: -70px;
+                top: 82px;
+                height: calc(100% - 82px);
+                z-index: 1000;
+                transition: left 0.3s;
+            }
+            
+            .client-sidebar.active {
+                left: 0;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+            
+            .mobile-toggle {
+                display: block;
+                background: none;
+                border: none;
+                color: var(--primary-color);
+                font-size: 1.5rem;
+                margin-right: 15px;
+                cursor: pointer;
+            }
+        }
+        
+        /* Music waves animation */
+        .music-waves {
+            display: flex;
+            align-items: flex-end;
+            height: 24px;
+            margin-right: 10px;
+            width: 32px;
+        }
+
+        .music-wave {
+            background: var(--accent2-color);
+            height: 100%;
+            width: 4px;
+            margin: 0 2px;
+            border-radius: 2px;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+
+        .music-wave:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .music-wave:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .music-wave:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes wave {
+            0%, 100% {
+                height: 8px;
+            }
+            50% {
+                height: 24px;
+            }
+        }
+        
+        /* Mobile menu overlay */
+        .mobile-sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .mobile-sidebar-overlay.active {
+            display: block;
+        }
+        
+        /* Styles pour l'intégration admin */
+        .admin-edit-badge {
+            display: none; /* Caché par défaut pour les clients */
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            text-align: center;
+            line-height: 24px;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .admin-mode .admin-edit-badge {
+            display: block; /* Visible en mode admin */
+        }
+        
+        .admin-editable {
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .admin-mode .admin-editable {
+            border: 1px dashed var(--primary-color);
+            padding: 5px;
+            margin: -5px;
+        }
+        
+        .admin-mode .admin-editable:hover {
+            background-color: rgba(200, 182, 166, 0.1);
+        }
+        
+        .admin-toolbar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            padding: 10px 20px;
+            z-index: 1000;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .admin-mode .admin-toolbar {
+            display: flex;
+        }
+        
+        .admin-toolbar-title {
+            font-weight: 600;
+            margin-right: 20px;
+        }
+        
+        .admin-toolbar-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .admin-toolbar-actions button {
+            margin-left: 10px;
+        }
+        
+        .admin-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1050;
+            display: none;
+        }
+        
+        .admin-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--white-color);
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            z-index: 1051;
+            display: none;
+        }
+        
+        .admin-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .admin-modal-title {
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+        
+        .admin-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--secondary-color);
+        }
+        
+        .admin-modal-body {
+            margin-bottom: 20px;
+        }
+        
+        .admin-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .admin-modal-footer button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="client-header">
+        <div class="container header-container">
+            <div class="d-flex align-items-center">
+                <button class="mobile-toggle d-md-none" id="mobileToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="client-dashboard.php" class="logo">
+                    <div class="music-waves">
+                        <div class="music-wave"></div>
+                        <div class="music-wave"></div>
+                        <div class="music-wave"></div>
+                        <div class="music-wave"></div>
+                    </div>
+                    DJ Prestige Sound
+                </a>
+            </div>
+            
+            <div class="user-menu">
+                <div class="notification-icon">
+                    <i class="fas fa-bell fa-lg"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                
+                <div class="user-dropdown dropdown">
+                    <button class="user-info dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://via.placeholder.com/40x40" alt="User Avatar" id="userAvatar">
+                        <div>
+                            <p class="user-name" id="userName">Jenny & Samir</p>
+                        </div>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="client-profile.php"><i class="fas fa-user me-2"></i>Mon profil</a></li>
+                        <li><a class="dropdown-item" href="client-events.php"><i class="fas fa-calendar-alt me-2"></i>Mes événements</a></li>
+                        <li><a class="dropdown-item" href="client-messages.php"><i class="fas fa-envelope me-2"></i>Messages</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="mobile-sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <!-- Content wrapper -->
+    <div class="content-wrapper">
+        <!-- Sidebar -->
+        <aside class="client-sidebar" id="clientSidebar">
+            <div class="sidebar-menu">
+                <span class="sidebar-title">Mon espace</span>
+                <a href="client-dashboard.php" class="menu-item active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Tableau de bord</span>
+                </a>
+                <a href="client-events.php" class="menu-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Mes événements</span>
+                </a>
+                <a href="client-requests.php" class="menu-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Mes demandes</span>
+                </a>
+                
+                <span class="sidebar-title">Musique</span>
+                <a href="client-playlist.php" class="menu-item">
+                    <i class="fas fa-music"></i>
+                    <span>Ma playlist</span>
+                </a>
+                <a href="client-music-preferences.php" class="menu-item">
+                    <i class="fas fa-heart"></i>
+                    <span>Mes préférences</span>
+                </a>
+                
+                <span class="sidebar-title">Communication</span>
+                <a href="client-messages.php" class="menu-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="client-support.php" class="menu-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Support</span>
+                </a>
+                
+                <span class="sidebar-title">Paramètres</span>
+                <a href="client-profile.php" class="menu-item">
+                    <i class="fas fa-user"></i>
+                    <span>Mon profil</span>
+                </a>
+            </div>
+        </aside>
+        
+        <!-- Main content -->
+        <main class="main-content">
+            <h1 class="page-title admin-editable" data-field="welcome-title" data-type="text">
+                <span id="welcomeTitle">Bienvenue, Jenny & Samir</span>
+                <div class="admin-edit-badge" data-target="welcome-title"><i class="fas fa-pencil-alt"></i></div>
+            </h1>
+            
+            <!-- Client Dashboard Widgets -->
+            <div class="row">
+                <!-- Upcoming event widget -->
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center admin-editable" data-field="event-widget-title" data-type="text">
+                            <span id="eventWidgetTitle">Votre prochain événement</span>
+                            <div class="admin-edit-badge" data-target="event-widget-title"><i class="fas fa-pencil-alt"></i></div>
+                            <a href="client-events.php" class="btn btn-sm btn-outline-primary">Tous les événements</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="event-card border-0 shadow-none m-0 admin-editable" data-field="next-event" data-type="event">
+                                <div class="admin-edit-badge" data-target="next-event"><i class="fas fa-pencil-alt"></i></div>
+                                <div class="event-body p-0">
+                                    <div class="event-details">
+                                        <h4 class="mb-3" id="eventTitle">Mariage - 26 juillet 2025</h4>
+                                        <div class="event-detail">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span id="eventLocation">Intermiles Malmedy</span>
+                                        </div>
+                                        <div class="event-detail">
+                                            <i class="fas fa-clock"></i>
+                                            <span id="eventTime">16:00 - 00:00</span>
+                                        </div>
+                                        <div class="event-detail">
+                                            <i class="fas fa-users"></i>
+                                            <span id="eventGuests">70 invités</span>
+                                        </div>
+                                        <div class="event-detail">
+                                            <i class="fas fa-music"></i>
+                                            <span id="eventServices">Services: DJ, Éclairage & Ambiance lumineuse</span>
+                                        </div>
+                                    </div>
+                                    <div class="event-actions">
+                                        <span class="event-status status-pending" id="eventStatus">En attente de confirmation</span>
+                                        <div>
+                                            <a href="#" class="btn btn-sm btn-outline-primary me-2">Détails</a>
+                                            <a href="#" class="btn btn-sm btn-primary">Modifier</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Music preferences widget -->
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center admin-editable" data-field="music-preferences-title" data-type="text">
+                            <span id="musicPrefsTitle">Vos préférences musicales</span>
+                            <div class="admin-edit-badge" data-target="music-preferences-title"><i class="fas fa-pencil-alt"></i></div>
+                            <a href="client-music-preferences.php" class="btn btn-sm btn-outline-primary">Modifier</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-12 admin-editable" data-field="music-genres" data-type="tags">
+                                    <div class="admin-edit-badge" data-target="music-genres"><i class="fas fa-pencil-alt"></i></div>
+                                    <h5>Genres favoris</h5>
+                                    <div class="music-genres" id="musicGenres">
+                                        <span class="genre-tag selected">Rock</span>
+                                        <span class="genre-tag selected">Pop</span>
+                                        <span class="genre-tag">Electro</span>
+                                        <span class="genre-tag">Funk</span>
+                                        <span class="genre-tag">Jazz</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12 admin-editable" data-field="music-artists" data-type="tags">
+                                    <div class="admin-edit-badge" data-target="music-artists"><i class="fas fa-pencil-alt"></i></div>
+                                    <h5>Artistes favoris</h5>
+                                    <div class="music-artists" id="musicArtists">
+                                        <span class="artist-tag selected">Queen</span>
+                                        <span class="artist-tag selected">Daft Punk</span>
+                                        <span class="artist-tag selected">Michael Jackson</span>
+                                        <span class="artist-tag">The Beatles</span>
+                                        <span class="artist-tag">Nirvana</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 admin-editable" data-field="music-ambiance" data-type="select">
+                                    <div class="admin-edit-badge" data-target="music-ambiance"><i class="fas fa-pencil-alt"></i></div>
+                                    <h5>Ambiance préférée</h5>
+                                    <select class="form-select" id="musicAmbiance">
+                                        <option>Festive</option>
+                                        <option>Romantique</option>
+                                        <option>Décontractée</option>
+                                        <option>Élégante</option>
+                                        <option>Surprise</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <!-- Request status widget -->
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center admin-editable" data-field="request-status-title" data-type="text">
+                            <span id="requestStatusTitle">État de votre demande</span>
+                            <div class="admin-edit-badge" data-target="request-status-title"><i class="fas fa-pencil-alt"></i></div>
+                            <a href="client-requests.php" class="btn btn-sm btn-outline-primary">Détails</a>
+                        </div>
+                        <div class="card-body admin-editable" data-field="request-status" data-type="request">
+                            <div class="admin-edit-badge" data-target="request-status"><i class="fas fa-pencil-alt"></i></div>
+                            <div class="d-flex justify-content-between mb-4">
+                                <h4 id="requestNumber">Demande #32</h4>
+                                <span class="badge bg-warning" id="requestStatusBadge">En attente</span>
+                            </div>
+                            
+                            <div class="progress mb-4" style="height: 30px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" id="requestProgress">50%</div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-group list-group-flush" id="requestSteps">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                            <span><i class="fas fa-check-circle text-success me-2"></i> Demande envoyée</span>
+                                            <small>09/03/2025</small>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                            <span><i class="fas fa-check-circle text-success me-2"></i> Demande reçue</span>
+                                            <small>10/03/2025</small>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                            <span><i class="fas fa-circle text-warning me-2"></i> Offre en préparation</span>
+                                            <small>En cours</small>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                            <span><i class="fas fa-circle text-muted me-2"></i> Devis envoyé</span>
+                                            <small>-</small>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                            <span><i class="fas fa-circle text-muted me-2"></i> Confirmation client</span>
+                                            <small>-</small>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                            <span><i class="fas fa-circle text-muted me-2"></i> Contrat signé</span>
+                                            <small>-</small>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                            <span><i class="fas fa-circle text-muted me-2"></i> Paiement acompte</span>
+                                            <small>-</small>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                            <span><i class="fas fa-circle text-muted me-2"></i> Service confirmé</span>
+                                            <small>-</small>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message widget -->
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center admin-editable" data-field="message-widget-title" data-type="text">
+                            <span id="messageWidgetTitle">Messages récents</span>
+                            <div class="admin-edit-badge" data-target="message-widget-title"><i class="fas fa-pencil-alt"></i></div>
+                            <a href="client-messages.php" class="btn btn-sm btn-outline-primary">Tous les messages</a>
+                        </div>
+                        <div class="card-body admin-editable" data-field="recent-messages" data-type="messages">
+                            <div class="admin-edit-badge" data-target="recent-messages"><i class="fas fa-pencil-alt"></i></div>
+                            <div class="message-list" id="messageList">
+                                <div class="message-item d-flex mb-3 pb-3 border-bottom">
+                                    <img src="https://via.placeholder.com/40x40" alt="Avatar" class="rounded-circle me-3" width="40" height="40">
+                                    <div class="message-content">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="mb-1">DJ Alex</h6>
+                                            <small class="text-muted">11/03/2025</small>
+                                        </div>
+                                        <p class="mb-0">Bonjour! Je commence à préparer votre playlist pour l'événement. Avez-vous des chansons particulières pour l'ouverture?</p>
+                                    </div>
+                                </div>
+                                <div class="message-item d-flex mb-3 pb-3 border-bottom">
+                                    <img src="https://via.placeholder.com/40x40" alt="Avatar" class="rounded-circle me-3" width="40" height="40">
+                                    <div class="message-content">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="mb-1">Service client</h6>
+                                            <small class="text-muted">10/03/2025</small>
+                                        </div>
+                                        <p class="mb-0">Votre demande a été bien reçue. Notre équipe l'étudie actuellement et reviendra vers vous dans les 48 heures.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <a href="client-messages.php" class="btn btn-primary w-100">Répondre</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Admin Toolbar (visible only in admin mode) -->
+    <div class="admin-toolbar">
+        <div class="d-flex align-items-center">
+            <span class="admin-toolbar-title">Mode Édition - Espace Client</span>
+            <span class="badge bg-warning me-2">ID Client: <span id="clientID">23</span></span>
+            <span class="badge bg-info">Vue: <span id="currentView">Tableau de bord</span></span>
+        </div>
+        <div class="admin-toolbar-actions">
+            <button class="btn btn-sm btn-light" id="previewButton"><i class="fas fa-eye me-2"></i>Aperçu</button>
+            <button class="btn btn-sm btn-success" id="saveChangesButton"><i class="fas fa-save me-2"></i>Enregistrer</button>
+            <button class="btn btn-sm btn-danger" id="exitAdminModeButton"><i class="fas fa-times me-2"></i>Quitter</button>
+        </div>
+    </div>
+    
+    <!-- Admin Edit Modal -->
+    <div class="admin-modal-backdrop" id="adminModalBackdrop"></div>
+    <div class="admin-modal" id="adminEditModal">
+        <div class="admin-modal-header">
+            <h5 class="admin-modal-title" id="adminModalTitle">Modifier le contenu</h5>
+            <button class="admin-modal-close" id="adminModalClose">&times;</button>
+        </div>
+        <div class="admin-modal-body" id="adminModalBody">
+            <!-- Le contenu sera généré dynamiquement en fonction de l'élément édité -->
+        </div>
+        <div class="admin-modal-footer">
+            <button class="btn btn-secondary" id="adminModalCancel">Annuler</button>
+            <button class="btn btn-primary" id="adminModalSave">Enregistrer</button>
+        </div>
+    </div>
+
+    <!-- JavaScript pour l'administration client -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Variables pour le mode administrateur
+            let isAdminMode = false;
+            let currentEditField = null;
+            let originalContent = {};
+            let changes = {};
+            
+            // Détection si admin (ajouté via paramètre URL ?admin=true)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') === 'true') {
+                enableAdminMode();
+            }
+            
+            // Activer le mode d'édition admin
+            function enableAdminMode() {
+                isAdminMode = true;
+                document.body.classList.add('admin-mode');
+                
+                // Ajouter les écouteurs d'événements pour les badges d'édition
+                document.querySelectorAll('.admin-edit-badge').forEach(badge => {
+                    badge.addEventListener('click', function() {
+                        const targetField = this.getAttribute('data-target');
+                        const editableElement = document.querySelector(`.admin-editable[data-field="${targetField}"]`);
+                        openEditModal(editableElement);
+                    });
+                });
+                
+                // Configuration des boutons de la barre d'outils
+                document.getElementById('previewButton').addEventListener('click', togglePreview);
+                document.getElementById('saveChangesButton').addEventListener('click', saveChanges);
+                document.getElementById('exitAdminModeButton').addEventListener('click', exitAdminMode);
+                
+                // Configuration des boutons du modal
+                document.getElementById('adminModalClose').addEventListener('click', closeEditModal);
+                document.getElementById('adminModalCancel').addEventListener('click', closeEditModal);
+                document.getElementById('adminModalSave').addEventListener('click', saveModalChanges);
+            }
+            
+            // Désactiver le mode d'édition admin
+            function exitAdminMode() {
+                if (Object.keys(changes).length > 0) {
+                    if (confirm("Vous avez des modifications non enregistrées. Voulez-vous vraiment quitter le mode édition?")) {
+                        window.location.href = 'admin-dashboard-enhanced.html';
+                    }
+                } else {
+                    window.location.href = 'admin-dashboard-enhanced.html';
+                }
+            }
+            
+            // Basculer l'aperçu (masquer/afficher les indicateurs d'édition)
+            function togglePreview() {
+                document.body.classList.toggle('admin-mode');
+                const isPreview = !document.body.classList.contains('admin-mode');
+                document.getElementById('previewButton').innerHTML = isPreview ? 
+                    '<i class="fas fa-edit me-2"></i>Mode Édition' : 
+                    '<i class="fas fa-eye me-2"></i>Aperçu';
+            }
+            
+            // Ouvrir le modal d'édition pour un élément
+            function openEditModal(element) {
+                currentEditField = element;
+                const fieldName = element.getAttribute('data-field');
+                const fieldType = element.getAttribute('data-type');
+                
+                // Sauvegarder le contenu original si ce n'est pas déjà fait
+                if (!originalContent[fieldName]) {
+                    originalContent[fieldName] = getElementContent(element);
+                }
+                
+                // Configurer le titre du modal
+                document.getElementById('adminModalTitle').textContent = `Modifier : ${getDisplayName(fieldName)}`;
+                
+                // Générer le contenu du modal en fonction du type de champ
+                const modalBody = document.getElementById('adminModalBody');
+                modalBody.innerHTML = generateModalContent(element, fieldType);
+                
+                // Afficher le modal
+                document.getElementById('adminModalBackdrop').style.display = 'block';
+                document.getElementById('adminEditModal').style.display = 'block';
+            }
+            
+            // Fermer le modal d'édition
+            function closeEditModal() {
+                document.getElementById('adminModalBackdrop').style.display = 'none';
+                document.getElementById('adminEditModal').style.display = 'none';
+                currentEditField = null;
+            }
+            
+            // Enregistrer les modifications du modal actuel
+            function saveModalChanges() {
+                if (!currentEditField) return;
+                
+                const fieldName = currentEditField.getAttribute('data-field');
+                const fieldType = currentEditField.getAttribute('data-type');
+                
+                // Récupérer les nouvelles valeurs depuis le modal
+                const newContent = getModalContent(fieldType);
+                
+                // Mettre à jour l'élément dans le DOM
+                updateElementContent(currentEditField, newContent);
+                
+                // Enregistrer les modifications pour l'enregistrement ultérieur
+                changes[fieldName] = newContent;
+                
+                // Fermer le modal
+                closeEditModal();
+            }
+            
+            // Enregistrer toutes les modifications sur le serveur
+            function saveChanges() {
+                // Dans une véritable implémentation, envoyer les modifications au serveur
+                console.log('Saving changes:', changes);
+                
+                // Simulation d'une requête API
+                const clientID = document.getElementById('clientID').textContent;
+                
+                // Exemple d'appel API qui serait implémenté en production
+                /* 
+                axios.post(`/api/admin/clients/${clientID}/dashboard`, changes)
+                    .then(response => {
+                        alert('Modifications enregistrées avec succès!');
+                        changes = {};
+                    })
+                    .catch(error => {
+                        alert('Erreur lors de l\'enregistrement: ' + error.message);
+                    });
+                */
+                
+                // Pour la démo, afficher simplement une alerte
+                setTimeout(() => {
+                    alert('Modifications enregistrées avec succès!');
+                    changes = {};
+                }, 1000);
+            }
+            
+            // Fonctions utilitaires
+            
+            // Obtenir un nom d'affichage convivial pour un champ
+            function getDisplayName(fieldName) {
+                const displayNames = {
+                    'welcome-title': 'Titre de bienvenue',
+                    'event-widget-title': 'Titre widget événement',
+                    'next-event': 'Prochain événement',
+                    'music-preferences-title': 'Titre préférences musicales',
+                    'music-genres': 'Genres musicaux',
+                    'music-artists': 'Artistes favoris',
+                    'music-ambiance': 'Ambiance préférée',
+                    'request-status-title': 'Titre état demande',
+                    'request-status': 'État de la demande',
+                    'message-widget-title': 'Titre widget messages',
+                    'recent-messages': 'Messages récents'
+                };
+                
+                return displayNames[fieldName] || fieldName;
+            }
+            
+            // Obtenir le contenu actuel d'un élément
+            function getElementContent(element) {
+                const fieldType = element.getAttribute('data-type');
+                
+                if (fieldType === 'text') {
+                    // Simple texte
+                    const id = element.querySelector('[id]').id;
+                    return document.getElementById(id).textContent;
+                } else if (fieldType === 'tags') {
+                    // Collection de tags
+                    const tags = [];
+                    const tagContainer = element.querySelector('.music-genres, .music-artists');
+                    tagContainer.querySelectorAll('.genre-tag, .artist-tag').forEach(tag => {
+                        tags.push({
+                            name: tag.textContent,
+                            selected: tag.classList.contains('selected')
+                        });
+                    });
+                    return tags;
+                } else if (fieldType === 'select') {
+                    // Sélection
+                    const select = element.querySelector('select');
+                    return {
+                        value: select.value,
+                        options: Array.from(select.options).map(opt => opt.textContent)
+                    };
+                } else if (fieldType === 'event') {
+                    // Événement
+                    return {
+                        title: document.getElementById('eventTitle').textContent,
+                        location: document.getElementById('eventLocation').textContent,
+                        time: document.getElementById('eventTime').textContent,
+                        guests: document.getElementById('eventGuests').textContent,
+                        services: document.getElementById('eventServices').textContent,
+                        status: document.getElementById('eventStatus').textContent
+                    };
+                } else if (fieldType === 'request') {
+                    // État de la demande
+                    const steps = [];
+                    document.getElementById('requestSteps').querySelectorAll('li').forEach(li => {
+                        const icon = li.querySelector('i');
+                        const status = icon.classList.contains('text-success') ? 'completed' :
+                                      icon.classList.contains('text-warning') ? 'current' : 'pending';
+                        
+                        steps.push({
+                            name: li.querySelector('span').textContent.trim().replace(/^[■✓⟳✗]\s*/, ''),
+                            status: status,
+                            date: li.querySelector('small').textContent
+                        });
+                    });
+                    
+                    return {
+                        number: document.getElementById('requestNumber').textContent,
+                        status: document.getElementById('requestStatusBadge').textContent,
+                        progress: parseInt(document.getElementById('requestProgress').textContent),
+                        steps: steps
+                    };
+                } else if (fieldType === 'messages') {
+                    // Messages
+                    const messages = [];
+                    document.getElementById('messageList').querySelectorAll('.message-item').forEach(msg => {
+                        messages.push({
+                            sender: msg.querySelector('h6').textContent,
+                            date: msg.querySelector('small').textContent,
+                            content: msg.querySelector('p').textContent,
+                            avatar: msg.querySelector('img').src
+                        });
+                    });
+                    return messages;
+                }
+                
+                return null;
+            }
+            
+            // Générer le contenu du modal en fonction du type de champ
+            function generateModalContent(element, fieldType) {
+                const content = getElementContent(element);
+                let html = '';
+                
+                if (fieldType === 'text') {
+                    html = `
+                        <div class="mb-3">
+                            <label for="editText" class="form-label">Texte</label>
+                            <input type="text" class="form-control" id="editText" value="${content}">
+                        </div>
+                    `;
+                } else if (fieldType === 'tags') {
+                    html = `
+                        <div class="mb-3">
+                            <label class="form-label">Tags</label>
+                            <div class="tags-container">
+                    `;
+                    
+                    content.forEach((tag, index) => {
+                        html += `
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control tag-name" value="${tag.name}">
+                                <div class="input-group-text">
+                                    <input class="form-check-input tag-selected" type="checkbox" ${tag.selected ? 'checked' : ''}>
+                                </div>
+                                <button class="btn btn-outline-danger remove-tag" type="button">×</button>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary mt-2" id="addTagButton">Ajouter un tag</button>
+                        </div>
+                    `;
+                } else if (fieldType === 'select') {
+                    html = `
+                        <div class="mb-3">
+                            <label for="editSelect" class="form-label">Option sélectionnée</label>
+                            <select class="form-select" id="editSelect">
+                    `;
+                    
+                    content.options.forEach(option => {
+                        html += `<option ${option === content.value ? 'selected' : ''}>${option}</option>`;
+                    });
+                    
+                    html += `
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Gérer les options</label>
+                            <div class="options-container">
+                    `;
+                    
+                    content.options.forEach(option => {
+                        html += `
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control option-name" value="${option}">
+                                <button class="btn btn-outline-danger remove-option" type="button">×</button>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary mt-2" id="addOptionButton">Ajouter une option</button>
+                        </div>
+                    `;
+                } else if (fieldType === 'event') {
+                    html = `
+                        <div class="mb-3">
+                            <label for="editEventTitle" class="form-label">Titre</label>
+                            <input type="text" class="form-control" id="editEventTitle" value="${content.title}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventLocation" class="form-label">Lieu</label>
+                            <input type="text" class="form-control" id="editEventLocation" value="${content.location}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventTime" class="form-label">Horaire</label>
+                            <input type="text" class="form-control" id="editEventTime" value="${content.time}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventGuests" class="form-label">Invités</label>
+                            <input type="text" class="form-control" id="editEventGuests" value="${content.guests}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventServices" class="form-label">Services</label>
+                            <input type="text" class="form-control" id="editEventServices" value="${content.services}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventStatus" class="form-label">Statut</label>
+                            <select class="form-select" id="editEventStatus">
+                                <option ${content.status === "En attente de confirmation" ? 'selected' : ''}>En attente de confirmation</option>
+                                <option ${content.status === "Confirmé" ? 'selected' : ''}>Confirmé</option>
+                                <option ${content.status === "Terminé" ? 'selected' : ''}>Terminé</option>
+                                <option ${content.status === "Annulé" ? 'selected' : ''}>Annulé</option>
+                            </select>
+                        </div>
+                    `;
+                } else if (fieldType === 'request') {
+                    html = `
+                        <div class="mb-3">
+                            <label for="editRequestNumber" class="form-label">Numéro de demande</label>
+                            <input type="text" class="form-control" id="editRequestNumber" value="${content.number}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRequestStatus" class="form-label">Statut</label>
+                            <select class="form-select" id="editRequestStatus">
+                                <option ${content.status === "En attente" ? 'selected' : ''}>En attente</option>
+                                <option ${content.status === "En cours" ? 'selected' : ''}>En cours</option>
+                                <option ${content.status === "Approuvé" ? 'selected' : ''}>Approuvé</option>
+                                <option ${content.status === "Refusé" ? 'selected' : ''}>Refusé</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRequestProgress" class="form-label">Progression (${content.progress}%)</label>
+                            <input type="range" class="form-range" id="editRequestProgress" min="0" max="100" value="${content.progress}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Étapes</label>
+                            <div class="steps-container">
+                    `;
+                    
+                    content.steps.forEach((step, index) => {
+                        html += `
+                            <div class="card mb-2">
+                                <div class="card-body p-2">
+                                    <div class="mb-2">
+                                        <label class="form-label">Nom de l'étape</label>
+                                        <input type="text" class="form-control step-name" value="${step.name}">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Statut</label>
+                                        <select class="form-select step-status">
+                                            <option value="pending" ${step.status === 'pending' ? 'selected' : ''}>À venir</option>
+                                            <option value="current" ${step.status === 'current' ? 'selected' : ''}>En cours</option>
+                                            <option value="completed" ${step.status === 'completed' ? 'selected' : ''}>Terminé</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Date</label>
+                                        <input type="text" class="form-control step-date" value="${step.date}">
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                } else if (fieldType === 'messages') {
+                    html = `
+                        <div class="mb-3">
+                            <label class="form-label">Messages</label>
+                            <div class="messages-container">
+                    `;
+                    
+                    content.forEach((message, index) => {
+                        html += `
+                            <div class="card mb-2 message-edit-card">
+                                <div class="card-body p-2">
+                                    <div class="mb-2">
+                                        <label class="form-label">Expéditeur</label>
+                                        <input type="text" class="form-control message-sender" value="${message.sender}">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Date</label>
+                                        <input type="text" class="form-control message-date" value="${message.date}">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Contenu</label>
+                                        <textarea class="form-control message-content">${message.content}</textarea>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Avatar URL</label>
+                                        <input type="text" class="form-control message-avatar" value="${message.avatar}">
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-danger w-100 remove-message">Supprimer ce message</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary mt-2" id="addMessageButton">Ajouter un message</button>
+                        </div>
+                    `;
+                }
+                
+                // Ajouter les écouteurs d'événements après l'affichage du modal
+                setTimeout(() => {
+                    // Écouteurs pour les boutons d'ajout de tag/option
+                    const addTagButton = document.getElementById('addTagButton');
+                    if (addTagButton) {
+                        addTagButton.addEventListener('click', addNewTag);
+                    }
+                    
+                    const addOptionButton = document.getElementById('addOptionButton');
+                    if (addOptionButton) {
+                        addOptionButton.addEventListener('click', addNewOption);
+                    }
+                    
+                    const addMessageButton = document.getElementById('addMessageButton');
+                    if (addMessageButton) {
+                        addMessageButton.addEventListener('click', addNewMessage);
+                    }
+                    
+                    // Écouteurs pour les boutons de suppression
+                    document.querySelectorAll('.remove-tag').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            this.closest('.input-group').remove();
+                        });
+                    });
+                    
+                    document.querySelectorAll('.remove-option').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            this.closest('.input-group').remove();
+                        });
+                    });
+                    
+                    document.querySelectorAll('.remove-message').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            this.closest('.message-edit-card').remove();
+                        });
+                    });
+                    
+                    // Mise à jour en direct pour la progression
+                    const progressRange = document.getElementById('editRequestProgress');
+                    if (progressRange) {
+                        progressRange.addEventListener('input', function() {
+                            this.previousElementSibling.textContent = `Progression (${this.value}%)`;
+                        });
+                    }
+                }, 100);
+                
+                return html;
+            }
+            
+            // Fonctions pour ajouter de nouveaux éléments dans le modal
+            function addNewTag() {
+                const container = document.querySelector('.tags-container');
+                const newTag = document.createElement('div');
+                newTag.className = 'input-group mb-2';
+                newTag.innerHTML = `
+                    <input type="text" class="form-control tag-name" value="Nouveau tag">
+                    <div class="input-group-text">
+                        <input class="form-check-input tag-selected" type="checkbox">
+                    </div>
+                    <button class="btn btn-outline-danger remove-tag" type="button">×</button>
+                `;
+                
+                container.appendChild(newTag);
+                
+                // Ajouter l'écouteur d'événements pour le bouton de suppression
+                newTag.querySelector('.remove-tag').addEventListener('click', function() {
+                    this.closest('.input-group').remove();
+                });
+            }
+            
+            function addNewOption() {
+                const container = document.querySelector('.options-container');
+                const newOption = document.createElement('div');
+                newOption.className = 'input-group mb-2';
+                newOption.innerHTML = `
+                    <input type="text" class="form-control option-name" value="Nouvelle option">
+                    <button class="btn btn-outline-danger remove-option" type="button">×</button>
+                `;
+                
+                container.appendChild(newOption);
+                
+                // Ajouter l'écouteur d'événements pour le bouton de suppression
+                newOption.querySelector('.remove-option').addEventListener('click', function() {
+                    this.closest('.input-group').remove();
+                });
+            }
+            
+            function addNewMessage() {
+                const container = document.querySelector('.messages-container');
+                const newMessage = document.createElement('div');
+                newMessage.className = 'card mb-2 message-edit-card';
+                newMessage.innerHTML = `
+                    <div class="card-body p-2">
+                        <div class="mb-2">
+                            <label class="form-label">Expéditeur</label>
+                            <input type="text" class="form-control message-sender" value="Nouvel expéditeur">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Date</label>
+                            <input type="text" class="form-control message-date" value="${new Date().toLocaleDateString()}">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Contenu</label>
+                            <textarea class="form-control message-content">Contenu du message...</textarea>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Avatar URL</label>
+                            <input type="text" class="form-control message-avatar" value="https://via.placeholder.com/40x40">
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger w-100 remove-message">Supprimer ce message</button>
+                    </div>
+                `;
+                
+                container.appendChild(newMessage);
+                
+                // Ajouter l'écouteur d'événements pour le bouton de suppression
+                newMessage.querySelector('.remove-message').addEventListener('click', function() {
+                    this.closest('.message-edit-card').remove();
+                });
+            }
+            
+            // Récupérer le contenu du modal
+            function getModalContent(fieldType) {
+                if (fieldType === 'text') {
+                    return document.getElementById('editText').value;
+                } else if (fieldType === 'tags') {
+                    const tags = [];
+                    document.querySelectorAll('.tag-name').forEach((input, index) => {
+                        tags.push({
+                            name: input.value,
+                            selected: document.querySelectorAll('.tag-selected')[index].checked
+                        });
+                    });
+                    return tags;
+                } else if (fieldType === 'select') {
+                    const options = [];
+                    document.querySelectorAll('.option-name').forEach(input => {
+                        options.push(input.value);
+                    });
+                    
+                    return {
+                        value: document.getElementById('editSelect').value,
+                        options: options
+                    };
+                } else if (fieldType === 'event') {
+                    return {
+                        title: document.getElementById('editEventTitle').value,
+                        location: document.getElementById('editEventLocation').value,
+                        time: document.getElementById('editEventTime').value,
+                        guests: document.getElementById('editEventGuests').value,
+                        services: document.getElementById('editEventServices').value,
+                        status: document.getElementById('editEventStatus').value
+                    };
+                } else if (fieldType === 'request') {
+                    const steps = [];
+                    document.querySelectorAll('.steps-container .card').forEach(card => {
+                        steps.push({
+                            name: card.querySelector('.step-name').value,
+                            status: card.querySelector('.step-status').value,
+                            date: card.querySelector('.step-date').value
+                        });
+                    });
+                    
+                    return {
+                        number: document.getElementById('editRequestNumber').value,
+                        status: document.getElementById('editRequestStatus').value,
+                        progress: parseInt(document.getElementById('editRequestProgress').value),
+                        steps: steps
+                    };
+                } else if (fieldType === 'messages') {
+                    const messages = [];
+                    document.querySelectorAll('.message-edit-card').forEach(card => {
+                        messages.push({
+                            sender: card.querySelector('.message-sender').value,
+                            date: card.querySelector('.message-date').value,
+                            content: card.querySelector('.message-content').value,
+                            avatar: card.querySelector('.message-avatar').value
+                        });
+                    });
+                    return messages;
+                }
+                
+                return null;
+            }
+            
+            // Mettre à jour le contenu d'un élément
+            function updateElementContent(element, content) {
+                const fieldType = element.getAttribute('data-type');
+                
+                if (fieldType === 'text') {
+                    // Simple texte
+                    const id = element.querySelector('[id]').id;
+                    document.getElementById(id).textContent = content;
+                } else if (fieldType === 'tags') {
+                    // Collection de tags
+                    const tagContainer = element.querySelector('.music-genres, .music-artists');
+                    tagContainer.innerHTML = '';
+                    
+                    content.forEach(tag => {
+                        const tagElement = document.createElement('span');
+                        tagElement.className = tag.selected ? 
+                            (tagContainer.classList.contains('music-genres') ? 'genre-tag selected' : 'artist-tag selected') : 
+                            (tagContainer.classList.contains('music-genres') ? 'genre-tag' : 'artist-tag');
+                        tagElement.textContent = tag.name;
+                        tagContainer.appendChild(tagElement);
+                    });
+                } else if (fieldType === 'select') {
+                    // Sélection
+                    const select = element.querySelector('select');
+                    select.innerHTML = '';
+                    
+                    content.options.forEach(option => {
+                        const optElement = document.createElement('option');
+                        optElement.textContent = option;
+                        if (option === content.value) {
+                            optElement.selected = true;
+                        }
+                        select.appendChild(optElement);
+                    });
+                } else if (fieldType === 'event') {
+                    // Événement
+                    document.getElementById('eventTitle').textContent = content.title;
+                    document.getElementById('eventLocation').textContent = content.location;
+                    document.getElementById('eventTime').textContent = content.time;
+                    document.getElementById('eventGuests').textContent = content.guests;
+                    document.getElementById('eventServices').textContent = content.services;
+                    document.getElementById('eventStatus').textContent = content.status;
+                    
+                    // Mettre à jour la classe du statut
+                    const statusElement = document.getElementById('eventStatus');
+                    statusElement.className = 'event-status';
+                    
+                    if (content.status.includes('attente')) {
+                        statusElement.classList.add('status-pending');
+                    } else if (content.status.includes('Confirmé')) {
+                        statusElement.classList.add('status-confirmed');
+                    } else if (content.status.includes('Terminé')) {
+                        statusElement.classList.add('status-completed');
+                    } else if (content.status.includes('Annulé')) {
+                        statusElement.classList.add('status-cancelled');
+                    }
+                } else if (fieldType === 'request') {
+                    // État de la demande
+                    document.getElementById('requestNumber').textContent = content.number;
+                    document.getElementById('requestStatusBadge').textContent = content.status;
+                    document.getElementById('requestProgress').textContent = content.progress + '%';
+                    document.getElementById('requestProgress').style.width = content.progress + '%';
+                    
+                    // Mettre à jour les étapes
+                    const stepsContainer = document.getElementById('requestSteps');
+                    stepsContainer.innerHTML = '';
+                    
+                    content.steps.forEach(step => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item d-flex justify-content-between align-items-center px-0';
+                        
+                        let iconClass = '';
+                        if (step.status === 'completed') {
+                            iconClass = 'fas fa-check-circle text-success';
+                        } else if (step.status === 'current') {
+                            iconClass = 'fas fa-circle text-warning';
+                        } else {
+                            iconClass = 'fas fa-circle text-muted';
+                        }
+                        
+                        li.innerHTML = `
+                            <span><i class="${iconClass} me-2"></i> ${step.name}</span>
+                            <small>${step.date}</small>
+                        `;
+                        
+                        stepsContainer.appendChild(li);
+                    });
+                } else if (fieldType === 'messages') {
+                    // Messages
+                    const messagesList = document.getElementById('messageList');
+                    messagesList.innerHTML = '';
+                    
+                    content.forEach(message => {
+                        const messageItem = document.createElement('div');
+                        messageItem.className = 'message-item d-flex mb-3 pb-3 border-bottom';
+                        messageItem.innerHTML = `
+                            <img src="${message.avatar}" alt="Avatar" class="rounded-circle me-3" width="40" height="40">
+                            <div class="message-content">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="mb-1">${message.sender}</h6>
+                                    <small class="text-muted">${message.date}</small>
+                                </div>
+                                <p class="mb-0">${message.content}</p>
+                            </div>
+                        `;
+                        
+                        messagesList.appendChild(messageItem);
+                    });
+                }
+            }
+            
+            // Initialisation du mobile sidebar toggle
+            document.getElementById('mobileToggle').addEventListener('click', function() {
+                document.getElementById('clientSidebar').classList.toggle('active');
+                document.getElementById('sidebarOverlay').classList.toggle('active');
+            });
+            
+            document.getElementById('sidebarOverlay').addEventListener('click', function() {
+                document.getElementById('clientSidebar').classList.remove('active');
+                this.classList.remove('active');
+            });
+        });
+    </script>
+    
+    <!-- Bootstrap & JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
