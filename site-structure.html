@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="DJ Prestige Sound - Créateur d'ambiances uniques pour vos événements. Services professionnels de DJ, animation, mariage et plus.">
+  <title>DJ Prestige Sound - Votre partenaire pour des événements inoubliables</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://djprestigesound.com">
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" as="style">
+  <link rel="preload" href="https://images.unsplash.com/photo-1504704911898-68304a7d2807?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" as="image">
+  
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com https://images.unsplash.com; script-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline' 'unsafe-eval'; style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline';">
+  
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:title" content="DJ Prestige Sound - Votre partenaire pour des événements inoubliables">
+  <meta property="og:description" content="Créateur d'ambiances uniques pour vos événements.">
+  <meta property="og:image" content="https://djprestigesound.com/path/to/og-image.jpg">
+  <meta property="og:url" content="https://djprestigesound.com">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "DJ Prestige Sound",
+    "url": "https://djprestigesound.com",
+    "logo": "https://djprestigesound.com/path/to/logo.png",
+    "description": "Créateur d'ambiances uniques pour vos événements.",
+    "sameAs": [
+      "https://www.facebook.com/djprestigesound",
+      "https://www.instagram.com/djprestigesound",
+      "https://www.youtube.com/djprestigesound",
+      "https://www.tiktok.com/@djprestigesound"
+    ]
+  }
+  </script>
+  
+  <!-- CSS externes -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #3D5A80;
+      --secondary-color: #98C1D9;
+      --accent-color: #EE6C4D;
+      --light-color: #E0FBFC;
+      --dark-color: #293241;
+    }
+    /* Dark mode variables */
+    body.dark-mode {
+      --primary-color: #98C1D9;
+      --secondary-color: #3D5A80;
+      --accent-color: #EE6C4D;
+      --light-color: #293241;
+      --dark-color: #E0FBFC;
+      background-color: #293241;
+      color: var(--dark-color);
+    }
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--dark-color);
+      background-color: #fafafa;
+      margin: 0;
+      padding: 0;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Playfair Display', serif;
+    }
+    
+    /* Navigation */
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 15px 0;
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      color: var(--primary-color);
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .nav-link {
+      font-weight: 500;
+      color: var(--dark-color);
+      margin: 0 10px;
+      transition: color 0.3s;
+    }
+    
+    .nav-link:hover {
+      color: var(--accent-color);
+    }
+    
+    .dropdown-menu {
+      border: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .dropdown-item:hover {
+      background-color: var(--light-color);
+      color: var(--primary-color);
+    }
+    
+    /* Dark Mode Toggle Button */
+    #dark-mode-toggle {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--primary-color);
+      transition: color 0.3s;
+    }
+    #dark-mode-toggle:hover {
+      color: var(--accent-color);
+    }
+    
+    /* Buttons */
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 30px;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--dark-color);
+      border-color: var(--dark-color);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .btn-outline-primary {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 30px;
+      transition: all 0.3s;
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .btn-outline-secondary {
+      color: var(--secondary-color);
+      border-color: var(--secondary-color);
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 30px;
+      transition: all 0.3s;
+    }
+    
+    .btn-outline-secondary:hover {
+      background-color: var(--secondary-color);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1504704911898-68304a7d2807?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 150px 0;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    }
+    
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      font-weight: 300;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+    
+    /* Sections */
+    main section {
+      padding: 80px 0;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+      position: relative;
+      color: var(--primary-color);
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background-color: var(--accent-color);
+    }
+    
+    /* About Section */
+    #about {
+      background-color: white;
+    }
+    
+    #about ul {
+      list-style: none;
+      padding-left: 0;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+    
+    #about li {
+      text-align: center;
+      margin: 15px;
+      padding: 20px;
+      background-color: var(--light-color);
+      border-radius: 10px;
+      width: 150px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    
+    #about li:hover {
+      transform: translateY(-5px);
+    }
+    
+    #about strong {
+      display: block;
+      font-size: 2rem;
+      color: var(--accent-color);
+    }
+    
+    /* Services Section */
+    .service-item {
+      background-color: white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: all 0.3s;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 100%;
+      border-top: 4px solid var(--primary-color);
+    }
+    
+    .service-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .service-item h4 {
+      color: var(--primary-color);
+      margin: 20px 0;
+    }
+    
+    .service-icon {
+      font-size: 2.5rem;
+      color: var(--accent-color);
+      margin-bottom: 15px;
+    }
+    
+    /* How Section */
+    .step {
+      text-align: center;
+      padding: 20px;
+      position: relative;
+    }
+    
+    .step:not(:last-child):after {
+      content: '→';
+      position: absolute;
+      top: 50%;
+      right: -10px;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      color: var(--secondary-color);
+    }
+    
+    .step h4 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+    
+    /* Reviews Section */
+    .reviews_item {
+      padding: 20px;
+    }
+    
+    .reviews_text {
+      background-color: white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      position: relative;
+      padding: 20px;
+      border-radius: 5px;
+    }
+    
+    .reviews_text:after {
+      content: '';
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 0 15px 15px 15px;
+      border-style: solid;
+      border-color: transparent transparent white transparent;
+    }
+    
+    /* CTA Section */
+    #cta {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 100px 0;
+      text-align: center;
+    }
+    
+    #cta h2 {
+      color: white;
+    }
+    
+    /* Gallery Section */
+    .gallery-img {
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 30px;
+      position: relative;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+    }
+    
+    .gallery-img:hover {
+      transform: scale(1.03);
+    }
+    
+    .gallery-img img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      transition: all 0.5s;
+    }
+    
+    .gallery-img:hover img {
+      transform: scale(1.1);
+    }
+    
+    .gallery-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    
+    .gallery-img:hover .gallery-overlay {
+      opacity: 1;
+    }
+    
+    /* Footer */
+    footer {
+      background-color: var(--dark-color);
+      color: white;
+      padding: 40px 0;
+    }
+    
+    .footer-links h5 {
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+    }
+    
+    .footer-links ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: var(--accent-color);
+    }
+    
+    .social-icons a {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,0.1);
+      text-align: center;
+      line-height: 40px;
+      margin-right: 10px;
+      color: white;
+      transition: all 0.3s;
+    }
+    
+    .social-icons a:hover {
+      background-color: var(--accent-color);
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 20px;
+      margin-top: 30px;
+      text-align: center;
+    }
+    
+    /* Animation de la musique */
+    .music-waves {
+      display: flex;
+      align-items: flex-end;
+      height: 30px;
+      margin-left: 10px;
+    }
+    
+    .music-wave {
+      background: var(--accent-color);
+      height: 100%;
+      width: 10px;
+      margin: 0 3px;
+      border-radius: 10px;
+      animation: wave 1.2s infinite ease-in-out;
+    }
+    
+    .music-wave:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .music-wave:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    .music-wave:nth-child(4) {
+      animation-delay: 0.6s;
+    }
+    
+    @keyframes wave {
+      0%, 100% {
+        height: 15px;
+      }
+      50% {
+        height: 30px;
+      }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero p {
+        font-size: 1.2rem;
+      }
+      
+      .step:not(:last-child):after {
+        display: none;
+      }
+      
+      #about li {
+        width: 120px;
+        margin: 10px;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER & NAVIGATION -->
+  <header>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          DJ Prestige Sound
+          <div class="music-waves">
+            <div class="music-wave"></div>
+            <div class="music-wave"></div>
+            <div class="music-wave"></div>
+            <div class="music-wave"></div>
+          </div>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Basculer la navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Accueil</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Services</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="services_wedding.html">Mariage</a></li>
+                <li><a class="dropdown-item" href="services_dj.html">DJ</a></li>
+                <li><a class="dropdown-item" href="services_photograph.html">Photographes</a></li>
+                <li><a class="dropdown-item" href="services_nomade.html">Nomade</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="gallery.html">Galerie</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#testimonials">Témoignages</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Contact</a>
+            </li>
+          </ul>
+          <div class="d-flex align-items-center">
+            <button id="dark-mode-toggle" aria-label="Activer le mode sombre"><i class="fas fa-moon"></i></button>
+            <a href="register.php" class="btn btn-outline-primary me-2">Inscription</a>
+            <a href="login.php" class="btn btn-primary">Se connecter</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- MAIN CONTENT -->
+  <main>
+    <!-- SECTION HERO -->
+    <section class="hero">
+      <div class="container hero-content text-center">
+        <h1>DJ Prestige Sound</h1>
+        <p>Créateur d'ambiances uniques pour vos événements</p>
+        <div class="mt-4">
+          <a href="#about" class="btn btn-lg btn-primary me-2">Découvrir</a>
+          <a href="#services" class="btn btn-lg btn-outline-secondary">Nos services</a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- SECTION À PROPOS -->
+    <section id="about">
+      <div class="container">
+        <h2 class="section-title">Qui sommes-nous ?</h2>
+        <div class="row justify-content-center">
+          <div class="col-md-8 text-center">
+            <p class="lead">DJ Prestige Sound, c'est la référence en animation d'événements. Avec plus de 10 ans d'expérience et plus de 200 événements couverts, nous transformons chaque occasion en un moment inoubliable.</p>
+            <p>Notre équipe de professionnels passionnés s'engage à créer une ambiance sur mesure qui correspondra parfaitement à vos attentes. De la sélection musicale aux effets lumineux, chaque détail est minutieusement pensé pour faire de votre événement un succès retentissant.</p>
+            <ul>
+              <li><strong>200+</strong> événements</li>
+              <li><strong>10 ans</strong> d'expérience</li>
+              <li><strong>98%</strong> satisfaction</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- SECTION SERVICES -->
+    <section id="services" class="bg-light">
+      <div class="container">
+        <h2 class="section-title">Nos Services</h2>
+        <div class="row g-4">
+          <div class="col-lg-3 col-md-6">
+            <div class="service-item h-100 p-4 text-center">
+              <i class="fas fa-ring service-icon"></i>
+              <h4>Mariage</h4>
+              <p>Organisation sur-mesure pour des mariages élégants et uniques, transformant vos rêves en réalité. Notre expertise comprend DJ, sono, lumières, cérémonie laïque et animation personnalisée.</p>
+              <a class="btn btn-sm btn-outline-primary mt-3" href="services_wedding.html">En savoir plus</a>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="service-item h-100 p-4 text-center">
+              <i class="fas fa-music service-icon"></i>
+              <h4>DJ</h4>
+              <p>Animation DJ sur mesure pour une ambiance parfaitement adaptée à chaque moment de votre événement. Nos DJ sont expérimentés dans tous les styles musicaux et s'adaptent à vos préférences.</p>
+              <a class="btn btn-sm btn-outline-primary mt-3" href="services_dj.html">En savoir plus</a>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="service-item h-100 p-4 text-center">
+              <i class="fas fa-camera service-icon"></i>
+              <h4>Photographes</h4>
+              <p>Capturer des souvenirs authentiques et personnalisés pour tous vos événements. Nos photographes professionnels immortalisent chaque moment important avec talent et sensibilité.</p>
+              <a class="btn btn-sm btn-outline-primary mt-3" href="services_photograph.html">En savoir plus</a>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="service-item h-100 p-4 text-center">
+              <i class="fas fa-map-marker-alt service-icon"></i>
+              <h4>Nomade</h4>
+              <p>Découvrez nos services nomades pour des animations en tout lieu. Que ce soit en extérieur, dans un lieu insolite ou chez vous, nous nous adaptons à tous les environnements.</p>
+              <a class="btn btn-sm btn-outline-primary mt-3" href="services_nomade.html">En savoir plus</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mt-5">
+          <div class="col-12 text-center">
+            <a href="services.html" class="btn btn-primary">Voir tous nos services</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- SECTION COMMENT ÇA MARCHE -->
+    <section id="how">
+      <div class="container">
+        <h2 class="section-title">Comment ça marche ?</h2>
+        <div class="row text-center">
+          <div class="col-md-3 step">
+            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 100px; height: 100px;">
+              <i class="fas fa-phone fa-2x text-primary"></i>
+            </div>
+            <h4>1. Contact</h4>
+            <p>Remplissez notre formulaire ou appelez-nous pour obtenir un devis personnalisé.</p>
+          </div>
+          <div class="col-md-3 step">
+            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 100px; height: 100px;">
+              <i class="fas fa-comments fa-2x text-primary"></i>
+            </div>
+            <h4>2. Échange</h4>
+            <p>Nous discutons de vos besoins et élaborons une offre sur-mesure.</p>
+          </div>
+          <div class="col-md-3 step">
+            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 100px; height: 100px;">
+              <i class="fas fa-user-circle fa-2x text-primary"></i>
+            </div>
+            <h4>3. Espace Pro</h4>
+            <p>Accédez à votre espace client pour suivre l'avancement de votre projet.</p>
+          </div>
+          <div class="col-md-3 step">
+            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 100px; height: 100px;">
+              <i class="fas fa-glass-cheers fa-2x text-primary"></i>
+            </div>
+            <h4>4. Le Jour J</h4>
+            <p>Laissez-nous créer l'ambiance qui marquera vos souvenirs à jamais.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- SECTION GALERIE -->
+    <section id="gallery" class="bg-light">
+      <div class="container">
+        <h2 class="section-title">Notre Galerie</h2>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="gallery-img">
+              <picture>
+                <source srcset="https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&w=2062&q=80&fm=webp" type="image/webp">
+                <img src="https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&w=2062&q=80" alt="Mariage élégant" loading="lazy">
+              </picture>
+              <div class="gallery-overlay">
+                <h5>Mariage élégant</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="gallery-img">
+              <picture>
+                <source srcset="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=2070&q=80&fm=webp" type="image/webp">
+                <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=2070&q=80" alt="Animation DJ" loading="lazy">
+              </picture>
+              <div class="gallery-overlay">
+                <h5>Animation DJ</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="gallery-img">
+              <picture>
+                <source srcset="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=2070&q=80&fm=webp" type="image/webp">
+                <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=2070&q=80" alt="Ambiance de soirée" loading="lazy">
+              </picture>
+              <div class="gallery-overlay">
+                <h5>Ambiance de soirée</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="gallery-img">
+              <picture>
+                <source srcset="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=2069&q=80&fm=webp" type="image/webp">
+                <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=2069&q=80" alt="Photographie" loading="lazy">
+              </picture>
+              <div class="gallery-overlay">
+                <h5>Photographie</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="gallery-img">
+              <picture>
+                <source srcset="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=2069&q=80&fm=webp" type="image/webp">
+                <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=2069&q=80" alt="Cérémonie" loading="lazy">
+              </picture>
+              <div class="gallery-overlay">
+                <h5>Cérémonie</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="gallery-img">
+              <picture>
+                <source srcset="https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=2070&q=80&fm=webp" type="image/webp">
+                <img src="https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=2070&q=80" alt="Piste de danse" loading="lazy">
+              </picture>
+              <div class="gallery-overlay">
+                <h5>Piste de danse</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-12 text-center">
+            <a href="gallery.html" class="btn btn-primary">Voir plus de photos</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- SECTION TÉMOIGNAGES -->
+    <section id="testimonials" class="py-5">
+      <div class="container">
+        <h2 class="section-title">Qu'en disent nos clients</h2>
+        <div class="owl-carousel reviews_carousel">
+          <div class="reviews_item text-center">
+            <img class="img-fluid rounded-circle p-2 mx-auto mb-4" src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Avatar utilisateur" style="width:100px; height:100px;" loading="lazy">
+            <div class="reviews_text rounded text-center p-4">
+              <p>"Superbe concert de funk soul pendant notre mariage. On a tous dansé non stop pendant 2 heures, même les plus timides."</p>
+              <h5 class="mb-1">Emmanuel M.</h5>
+              <p>Janvier 2025</p>
+            </div>
+          </div>
+          <div class="reviews_item text-center">
+            <img class="img-fluid rounded-circle p-2 mx-auto mb-4" src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Avatar utilisateur" style="width:100px; height:100px;" loading="lazy">
+            <div class="reviews_text rounded text-center p-4">
+              <p>"Un immense merci à Quentin et Julien pour leur prestation exceptionnelle lors de mon anniversaire !"</p>
+              <h5 class="mb-1">Jess V.</h5>
+              <p>Novembre 2024</p>
+            </div>
+          </div>
+          <div class="reviews_item text-center">
+            <img class="img-fluid rounded-circle p-2 mx-auto mb-4" src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Avatar utilisateur" style="width:100px; height:100px;" loading="lazy">
+            <div class="reviews_text rounded text-center p-4">
+              <p>"Travail remarquable, très à l'écoute du client. Notre mariage a été un franc succès grâce à leur prestation."</p>
+              <h5 class="mb-1">Alex H</h5>
+              <p>Octobre 2024</p>
+            </div>
+          </div>
+          <div class="reviews_item text-center">
+            <img class="img-fluid rounded-circle p-2 mx-auto mb-4" src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Avatar utilisateur" style="width:100px; height:100px;" loading="lazy">
+            <div class="reviews_text rounded text-center p-4">
+              <p>"Une prestation incroyable ! Mon mariage était magique grâce à DJ Prestige Sound. L'ambiance était parfaite du début à la fin."</p>
+              <h5 class="mb-1">Marie &amp; Paul</h5>
+              <p>Février 2025</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- SECTION GENRES MUSICAUX -->
+    <section id="music-genres" class="bg-light py-5">
+      <div class="container">
+        <h2 class="section-title">Nos Styles Musicaux</h2>
+        <div class="row text-center">
+          <div class="col-md-4 col-sm-6 mb-4">
+            <div class="genre-card p-4 bg-white rounded shadow-sm">
+              <i class="fas fa-guitar fa-3x mb-3 text-primary"></i>
+              <h4>Rock</h4>
+              <p>Des classiques aux hits contemporains</p>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6 mb-4">
+            <div class="genre-card p-4 bg-white rounded shadow-sm">
+              <i class="fas fa-compact-disc fa-3x mb-3 text-primary"></i>
+              <h4>Electro</h4>
+              <p>House, EDM et ambiances festives</p>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6 mb-4">
+            <div class="genre-card p-4 bg-white rounded shadow-sm">
+              <i class="fas fa-music fa-3x mb-3 text-primary"></i>
+              <h4>Funk</h4>
+              <p>Rythmes groovy et entraînants</p>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6 mb-4">
+            <div class="genre-card p-4 bg-white rounded shadow-sm">
+              <i class="fas fa-microphone fa-3x mb-3 text-primary"></i>
+              <h4>Pop</h4>
+              <p>Tubes populaires de toutes générations</p>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6 mb-4">
+            <div class="genre-card p-4 bg-white rounded shadow-sm">
+              <i class="fas fa-drum fa-3x mb-3 text-primary"></i>
+              <h4>Jazz</h4>
+              <p>Ambiances élégantes et sophistiquées</p>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6 mb-4">
+            <div class="genre-card p-4 bg-white rounded shadow-sm">
+              <i class="fas fa-globe-americas fa-3x mb-3 text-primary"></i>
+              <h4>Musiques du Monde</h4>
+              <p>Latino, salsa et rythmes internationaux</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- SECTION FORMULAIRE DE CONTACT -->
+    <section id="contact" class="py-5">
+      <div class="container">
+        <h2 class="section-title">Contactez-nous</h2>
+        <div class="row">
+          <div class="col-lg-6 mb-4 mb-lg-0">
+            <div class="contact-info p-4 bg-white rounded shadow-sm h-100">
+              <h4 class="mb-4">Informations de contact</h4>
+              <p><i class="fas fa-map-marker-alt me-2 text-primary"></i> Belgique</p>
+              <p><i class="fas fa-phone me-2 text-primary"></i> Téléphone : <a href="tel:+32000000000">+32 00 000 00 00</a></p>
+              <p><i class="fas fa-envelope me-2 text-primary"></i> Email : <a href="mailto:contact@djprestigesound.com">contact@djprestigesound.com</a></p>
+              <h5 class="mt-4 mb-3">Suivez-nous</h5>
+              <div class="social-icons">
+                <a href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                <a href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+                <a href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+              </div>
+              <div class="mt-4">
+                <h5 class="mb-3">Horaires</h5>
+                <p>Lundi - Vendredi: 9h - 18h</p>
+                <p>Samedi: Sur rendez-vous</p>
+                <p>Dimanche: Fermé</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="contact-form p-4 bg-white rounded shadow-sm">
+              <h4 class="mb-4">Envoyez-nous un message</h4>
+              <form>
+                <div class="mb-3">
+                  <input type="text" class="form-control" placeholder="Nom complet" required>
+                </div>
+                <div class="mb-3">
+                  <input type="email" class="form-control" placeholder="Email" required>
+                </div>
+                <div class="mb-3">
+                  <input type="tel" class="form-control" placeholder="Téléphone">
+                </div>
+                <div class="mb-3">
+                  <select class="form-select" required>
+                    <option value="" disabled selected>Type d'événement</option>
+                    <option>Mariage</option>
+                    <option>Anniversaire</option>
+                    <option>Soirée d'entreprise</option>
+                    <option>Autre</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <textarea class="form-control" rows="5" placeholder="Votre message" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Envoyer</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- SECTION ACCÈS ESPACE PRO / RÉSERVATION -->
+    <section id="cta">
+      <div class="container">
+        <h2 class="section-title">Accédez à votre espace pro</h2>
+        <p>Que vous soyez déjà client ou que vous souhaitiez réserver votre date, accédez à votre espace pour gérer vos événements, documents et bien plus encore.</p>
+        <a href="login.php" class="btn btn-primary btn-lg me-3">Je suis déjà client</a>
+        <a href="register.php" class="btn btn-outline-light btn-lg">Je veux réserver</a>
+      </div>
+    </section>
+  </main>
+  
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h4 class="text-white mb-4">DJ Prestige Sound</h4>
+          <p>Créateur d'ambiances uniques pour vos événements depuis plus de 10 ans. Notre expertise et notre passion font de nous le partenaire idéal pour rendre votre événement inoubliable.</p>
+          <div class="social-icons mt-3">
+            <a href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+            <a href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+          </div>
+        </div>
+        <div class="col-md-2 mb-4 mb-md-0 footer-links">
+          <h5>Navigation</h5>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="#about">À propos</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="gallery.html">Galerie</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 mb-4 mb-md-0 footer-links">
+          <h5>Services</h5>
+          <ul>
+            <li><a href="services_wedding.html">Mariage</a></li>
+            <li><a href="services_dj.html">DJ</a></li>
+            <li><a href="services_photograph.html">Photographes</a></li>
+            <li><a href="services_nomade.html">Nomade</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 footer-links">
+          <h5>Légal</h5>
+          <ul>
+            <li><a href="mentions-legales.html">Mentions légales</a></li>
+            <li><a href="confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="cgv.html">Conditions générales de vente</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2025 DJ Prestige Sound. Tous droits réservés.</p>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Back to top button -->
+  <a id="back-to-top" href="#" class="btn btn-primary back-to-top" role="button" style="position: fixed; bottom: 20px; right: 20px; display: none;"><i class="fas fa-arrow-up"></i></a>
+  
+  <!-- Chat Widget Integration (exemple) -->
+  <script defer src="https://example.com/chat-widget.js"></script>
+  
+  <!-- JS externes -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" defer></script>
+  
+  <!-- Script personnalisé -->
+  <script defer>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialisation du carousel des témoignages
+      $(".reviews_carousel").owlCarousel({
+        loop: true,
+        margin: 20,
+        nav: true,
+        dots: true,
+        autoplay: true,
+        autoplayTimeout: 5000,
+        autoplayHoverPause: true,
+        navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+        responsive: {
+          0: { items: 1 },
+          768: { items: 2 },
+          992: { items: 3 }
+        }
+      });
+      
+      // Afficher/masquer le bouton "Back to Top"
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          document.getElementById('back-to-top').style.display = 'block';
+        } else {
+          document.getElementById('back-to-top').style.display = 'none';
+        }
+      });
+      
+      // Défilement fluide vers le haut
+      document.getElementById('back-to-top').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      
+      // Défilement fluide pour les ancres
+      document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          if (location.pathname.replace(/^\//, '') === this.pathname.replace(/^\//, '') && location.hostname === this.hostname) {
+            let target = document.querySelector(this.hash);
+            if (target) {
+              e.preventDefault();
+              window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
+            }
+          }
+        });
+      });
+      
+      // Dark mode toggle
+      const toggleButton = document.getElementById('dark-mode-toggle');
+      toggleButton.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        // Sauvegarder la préférence dans le localStorage
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'true' : 'false');
+      });
+      
+      // Charger la préférence de dark mode
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+      }
+      
+      // Initialisation du widget de chat (exemple)
+      if(window.ChatWidget) {
+          ChatWidget.init({ position: 'bottom-right' });
+      }
+    });
+  </script>
+</body>
+</html>
